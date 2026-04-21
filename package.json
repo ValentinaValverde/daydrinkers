@@ -14,6 +14,7 @@
   },
   "prettier": "@shopify/prettier-config",
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "@shopify/hydrogen": "2026.4.1",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
