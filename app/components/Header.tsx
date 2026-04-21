@@ -124,10 +124,7 @@ export function HeaderMenu({
   }
 
   return (
-    <nav
-      className="hidden md:flex gap-16 text-sm text-black"
-      role="navigation"
-    >
+    <nav className="hidden md:flex gap-16 text-sm text-black" role="navigation">
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
         const url = resolveUrl(item.url, publicStoreDomain, primaryDomainUrl);
@@ -157,13 +154,18 @@ function HeaderCtas({
 
   return (
     <div className="flex gap-4 items-center text-black">
-      <button
-        className="hover:opacity-60 transition-opacity cursor-pointer"
-        onClick={() => open('search')}
+      <NavLink
+        prefetch="intent"
+        to="/search"
+        className="hidden md:block hover:opacity-60 transition-opacity"
         aria-label="Search"
       >
-        <MagnifyingGlassIcon size={24} />
-      </button>
+        <Suspense fallback={<MagnifyingGlassIcon size={24} />}>
+          <Await resolve={isLoggedIn}>
+            {() => <MagnifyingGlassIcon size={24} />}
+          </Await>
+        </Suspense>
+      </NavLink>
       <NavLink
         prefetch="intent"
         to="/account"

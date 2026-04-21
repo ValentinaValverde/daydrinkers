@@ -72,24 +72,28 @@ function CartAside({cart}: {cart: PageLayoutProps['cart']}) {
 function SearchAside() {
   const queriesDatalistId = useId();
   return (
-    <Aside type="search" heading="SEARCH">
+    <Aside type="search" heading="Search">
       <div className="predictive-search">
-        <br />
         <SearchFormPredictive>
           {({fetchResults, goToSearch, inputRef}) => (
-            <>
+            <div className="flex gap-2 items-center mb-4">
               <input
                 name="q"
                 onChange={fetchResults}
                 onFocus={fetchResults}
-                placeholder="Search"
+                placeholder="Search products..."
                 ref={inputRef}
                 type="search"
                 list={queriesDatalistId}
+                className="flex-1 bg-[#f0f2ea] rounded-full py-3 px-5 border-2 border-black/20 focus:border-black focus:outline-none text-sm"
               />
-              &nbsp;
-              <button onClick={goToSearch}>Search</button>
-            </>
+              <button
+                onClick={goToSearch}
+                className="bg-[#3c6d8e] text-white rounded-full px-5 py-3 text-sm font-medium hover:opacity-80 transition-opacity shrink-0"
+              >
+                Go
+              </button>
+            </div>
           )}
         </SearchFormPredictive>
 
@@ -98,7 +102,7 @@ function SearchAside() {
             const {articles, collections, pages, products, queries} = items;
 
             if (state === 'loading' && term.current) {
-              return <div>Loading...</div>;
+              return <div className="text-sm text-black/50 py-4">Searching...</div>;
             }
 
             if (!total) {
@@ -106,7 +110,7 @@ function SearchAside() {
             }
 
             return (
-              <>
+              <div className="space-y-4">
                 <SearchResultsPredictive.Queries
                   queries={queries}
                   queriesDatalistId={queriesDatalistId}
@@ -135,14 +139,12 @@ function SearchAside() {
                   <Link
                     onClick={closeSearch}
                     to={`${SEARCH_ENDPOINT}?q=${term.current}`}
+                    className="block text-center text-sm font-medium text-[#3c6d8e] hover:opacity-70 transition-opacity mt-4 pt-4 border-t border-black/10"
                   >
-                    <p>
-                      View all results for <q>{term.current}</q>
-                      &nbsp; →
-                    </p>
+                    View all results for &ldquo;{term.current}&rdquo; →
                   </Link>
                 ) : null}
-              </>
+              </div>
             );
           }}
         </SearchResultsPredictive>

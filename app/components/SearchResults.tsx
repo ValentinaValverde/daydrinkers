@@ -1,6 +1,7 @@
 import {Link} from 'react-router';
 import {Image, Money, Pagination} from '@shopify/hydrogen';
 import {urlWithTrackingParams, type RegularSearchReturn} from '~/lib/search';
+import {ProductItem} from '~/components/ProductItem';
 
 type SearchItems = RegularSearchReturn['result']['items'];
 type PartialSearchResult<ItemType extends keyof SearchItems> = Pick<
@@ -39,9 +40,9 @@ function SearchResultsArticles({
   }
 
   return (
-    <div className="search-result">
-      <h2>Articles</h2>
-      <div>
+    <div>
+      <h2 className="text-2xl font-bold text-black mb-6">Articles</h2>
+      <div className="space-y-3">
         {articles?.nodes?.map((article) => {
           const articleUrl = urlWithTrackingParams({
             baseUrl: `/blogs/${article.handle}`,
@@ -50,15 +51,17 @@ function SearchResultsArticles({
           });
 
           return (
-            <div className="search-results-item" key={article.id}>
-              <Link prefetch="intent" to={articleUrl}>
-                {article.title}
-              </Link>
-            </div>
+            <Link
+              key={article.id}
+              prefetch="intent"
+              to={articleUrl}
+              className="block text-black hover:opacity-60 transition-opacity font-medium"
+            >
+              {article.title}
+            </Link>
           );
         })}
       </div>
-      <br />
     </div>
   );
 }
@@ -69,9 +72,9 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
   }
 
   return (
-    <div className="search-result">
-      <h2>Pages</h2>
-      <div>
+    <div>
+      <h2 className="text-2xl font-bold text-black mb-6">Pages</h2>
+      <div className="space-y-3">
         {pages?.nodes?.map((page) => {
           const pageUrl = urlWithTrackingParams({
             baseUrl: `/pages/${page.handle}`,
@@ -80,15 +83,17 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
           });
 
           return (
-            <div className="search-results-item" key={page.id}>
-              <Link prefetch="intent" to={pageUrl}>
-                {page.title}
-              </Link>
-            </div>
+            <Link
+              key={page.id}
+              prefetch="intent"
+              to={pageUrl}
+              className="block text-black hover:opacity-60 transition-opacity font-medium"
+            >
+              {page.title}
+            </Link>
           );
         })}
       </div>
-      <br />
     </div>
   );
 }
@@ -102,60 +107,81 @@ function SearchResultsProducts({
   }
 
   return (
-    <div className="search-result">
-      <h2>Products</h2>
+    <div>
+      <h2 className="text-2xl font-bold text-black mb-8">Products</h2>
       <Pagination connection={products}>
-        {({nodes, isLoading, NextLink, PreviousLink}) => {
-          const ItemsMarkup = nodes.map((product) => {
-            const productUrl = urlWithTrackingParams({
-              baseUrl: `/products/${product.handle}`,
-              trackingParams: product.trackingParameters,
-              term,
-            });
-
-            const price = product?.selectedOrFirstAvailableVariant?.price;
-            const image = product?.selectedOrFirstAvailableVariant?.image;
-
-            return (
-              <div className="search-results-item" key={product.id}>
-                <Link prefetch="intent" to={productUrl}>
-                  {image && (
-                    <Image data={image} alt={product.title} width={50} />
-                  )}
-                  <div>
-                    <p>{product.title}</p>
-                    <small>{price && <Money data={price} />}</small>
-                  </div>
-                </Link>
-              </div>
-            );
-          });
-
-          return (
-            <div>
-              <div>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-              </div>
-              <div>
-                {ItemsMarkup}
-                <br />
-              </div>
-              <div>
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
-              </div>
+        {({nodes, isLoading, NextLink, PreviousLink}) => (
+          <div>
+            <div className="flex justify-center mb-8">
+              <PreviousLink className="bg-transparent border-2 border-black text-black rounded-full px-8 h-[52px] flex items-center font-medium hover:bg-black hover:text-white transition-colors">
+                {isLoading ? 'Loading...' : '↑ Load previous'}
+              </PreviousLink>
             </div>
-          );
-        }}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {nodes.map((product, i) => {
+                const price =
+                  product?.selectedOrFirstAvailableVariant?.price;
+                const image =
+                  product?.selectedOrFirstAvailableVariant?.image;
+                const productUrl = urlWithTrackingParams({
+                  baseUrl: `/products/${product.handle}`,
+                  trackingParams: product.trackingParameters,
+                  term,
+                });
+
+                return (
+                  <Link
+                    key={product.id}
+                    prefetch="intent"
+                    to={productUrl}
+                    className="space-y-3 block group"
+                  >
+                    <div className="rounded-[32px] overflow-hidden border-2 border-transparent group-hover:border-black transition-colors duration-300 bg-[#e4ceb4]">
+                      {image ? (
+                        <Image
+                          data={image}
+                          alt={product.title}
+                          aspectRatio="3/4"
+                          loading={i < 6 ? 'eager' : 'lazy'}
+                          sizes="(min-width: 45em) 400px, 100vw"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full aspect-[3/4] bg-[#e4ceb4]" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-lg text-black">
+                        {product.title}
+                      </p>
+                      <p className="text-sm text-black">
+                        {price && <Money data={price} />}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-center mt-10">
+              <NextLink className="bg-[#3c6d8e] text-white border-2 border-[#3c6d8e] rounded-full px-8 h-[52px] flex items-center font-medium hover:bg-transparent hover:text-[#3c6d8e] transition-colors">
+                {isLoading ? 'Loading...' : 'Load more ↓'}
+              </NextLink>
+            </div>
+          </div>
+        )}
       </Pagination>
-      <br />
     </div>
   );
 }
 
 function SearchResultsEmpty() {
-  return <p>No results, try a different search.</p>;
+  return (
+    <div className="text-center py-20">
+      <p className="text-xl text-black/60">
+        No results found. Try a different search term.
+      </p>
+    </div>
+  );
 }
