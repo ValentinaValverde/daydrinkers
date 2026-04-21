@@ -1,10 +1,6 @@
 import {Suspense, useState, useEffect} from 'react';
 import {Await, NavLink, useAsyncValue} from 'react-router';
-import {
-  type CartViewPayload,
-  useAnalytics,
-  useOptimisticCart,
-} from '@shopify/hydrogen';
+import {useOptimisticCart} from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
 import {
@@ -193,21 +189,10 @@ function HeaderCtas({
 }
 
 function CartBadge({count}: {count: number}) {
-  const {open} = useAside();
-  const {publish, shop, cart, prevCart} = useAnalytics();
-
   return (
-    <button
-      className="relative hover:opacity-60 transition-opacity cursor-pointer"
-      onClick={() => {
-        open('cart');
-        publish('cart_viewed', {
-          cart,
-          prevCart,
-          shop,
-          url: window.location.href || '',
-        } as CartViewPayload);
-      }}
+    <NavLink
+      to="/cart"
+      className="relative hover:opacity-60 transition-opacity"
       aria-label={`Cart, ${count} item${count !== 1 ? 's' : ''}`}
     >
       <ShoppingBagIcon size={24} />
@@ -216,7 +201,7 @@ function CartBadge({count}: {count: number}) {
           {count}
         </span>
       )}
-    </button>
+    </NavLink>
   );
 }
 

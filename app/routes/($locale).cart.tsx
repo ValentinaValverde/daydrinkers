@@ -5,21 +5,17 @@ import {CartForm} from '@shopify/hydrogen';
 import {CartMain} from '~/components/CartMain';
 
 export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Cart`}];
+  return [{title: 'Daydrinkers | Cart'}];
 };
 
 export const headers: HeadersFunction = ({actionHeaders}) => actionHeaders;
 
 export async function action({request, context}: Route.ActionArgs) {
   const {cart} = context;
-
   const formData = await request.formData();
-
   const {action, inputs} = CartForm.getFormInput(formData);
 
-  if (!action) {
-    throw new Error('No action provided');
-  }
+  if (!action) throw new Error('No action provided');
 
   let status = 200;
   let result: CartQueryDataReturn;
@@ -36,25 +32,18 @@ export async function action({request, context}: Route.ActionArgs) {
       break;
     case CartForm.ACTIONS.DiscountCodesUpdate: {
       const formDiscountCode = inputs.discountCode;
-
-      // User inputted discount code
       const discountCodes = (
         formDiscountCode ? [formDiscountCode] : []
       ) as string[];
-
-      // Combine discount codes already applied on cart
       discountCodes.push(...inputs.discountCodes);
-
       result = await cart.updateDiscountCodes(discountCodes);
       break;
     }
     case CartForm.ACTIONS.GiftCardCodesAdd: {
       const formGiftCardCode = inputs.giftCardCode;
-
       const giftCardCodes = (
         formGiftCardCode ? [formGiftCardCode] : []
       ) as string[];
-
       result = await cart.addGiftCardCodes(giftCardCodes);
       break;
     }
@@ -64,9 +53,7 @@ export async function action({request, context}: Route.ActionArgs) {
       break;
     }
     case CartForm.ACTIONS.BuyerIdentityUpdate: {
-      result = await cart.updateBuyerIdentity({
-        ...inputs.buyerIdentity,
-      });
+      result = await cart.updateBuyerIdentity({...inputs.buyerIdentity});
       break;
     }
     default:
@@ -83,17 +70,10 @@ export async function action({request, context}: Route.ActionArgs) {
     headers.set('Location', redirectTo);
   }
 
-  return data(
-    {
-      cart: cartResult,
-      errors,
-      warnings,
-      analytics: {
-        cartId,
-      },
-    },
-    {status, headers},
-  );
+  return data({cart: cartResult, errors, warnings, analytics: {cartId}}, {
+    status,
+    headers,
+  });
 }
 
 export async function loader({context}: Route.LoaderArgs) {
@@ -105,9 +85,12 @@ export default function Cart() {
   const cart = useLoaderData<typeof loader>();
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
-      <CartMain layout="page" cart={cart} />
+    <div className="min-h-screen bg-[#f0f2ea]">
+      <section className="pt-[100px] pb-16 md:pb-24">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8 py-16">
+          <CartMain layout="page" cart={cart ?? null} />
+        </div>
+      </section>
     </div>
   );
 }

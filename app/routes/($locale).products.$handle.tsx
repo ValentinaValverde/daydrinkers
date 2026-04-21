@@ -15,12 +15,34 @@ import {ProductPrice} from '~/components/ProductPrice';
 import {ProductForm} from '~/components/ProductForm';
 import {ProductItem} from '~/components/ProductItem';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
-import type {
-  ProductFragment,
-  ProductRecommendationsQuery,
-} from 'storefrontapi.generated';
+import type * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
+import type {ProductFragment} from 'storefrontapi.generated';
 
-export const meta: Route.MetaFunction = ({data}) => {
+type RecommendedProduct = {
+  id: string;
+  title: string;
+  handle: string;
+  priceRange: {
+    minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+  };
+  featuredImage: {
+    id?: string | null;
+    url: string;
+    altText?: string | null;
+    width?: number | null;
+    height?: number | null;
+  } | null;
+};
+
+type ProductRecommendationsQuery = {
+  productRecommendations: RecommendedProduct[] | null;
+};
+
+export const meta: Route.MetaFunction = ({
+  data,
+}: {
+  data?: {product: {title: string; handle: string}};
+}) => {
   return [
     {title: `Daydrinkers | ${data?.product.title ?? ''}`},
     {rel: 'canonical', href: `/products/${data?.product.handle}`},
@@ -239,7 +261,7 @@ function RelatedProducts({
                   </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {products.map((product, i) => (
+                  {products.map((product: RecommendedProduct, i: number) => (
                     <ProductItem
                       key={product.id}
                       product={product}
