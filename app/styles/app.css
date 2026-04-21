@@ -23,10 +23,6 @@ body {
   animation: marquee 25s linear infinite;
 }
 
-img {
-  border-radius: 4px;
-}
-
 /*
 * --------------------------------------------------
 * Non anchor links
