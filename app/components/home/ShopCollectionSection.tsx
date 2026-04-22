@@ -1,32 +1,22 @@
+import type {ProductItemFragment} from 'storefrontapi.generated';
 import PrimaryButton from '~/components/ui/Button';
-import ProductCard from '~/components/ui/ProductCard';
+import {ProductItem} from '~/components/ProductItem';
 
-const largeProduct = {
-  image: 'https://placehold.co/470x626/c8b49a/4a3a2a?text=.',
-  name: 'Daydrinkers Two Year Tee',
-  price: '$35',
-};
+export default function ShopCollectionSection({
+  products,
+}: {
+  products: ProductItemFragment[];
+}) {
+  const [large, ...small] = products;
 
-const smallProducts = [
-  {
-    image: 'https://placehold.co/207x304/b8a48a/4a3a2a?text=.',
-    name: 'Cafe Ballet Cuff Sock',
-    price: '$35',
-  },
-  {
-    image: 'https://placehold.co/225x304/c2ae94/4a3a2a?text=.',
-    name: 'Spilled Milk Socks',
-    price: '$35',
-  },
-];
-
-export default function ShopCollectionSection() {
   return (
-    <section id="shop" className="bg-[#f0f2ea] py-16 md:py-64">
+    <section id="shop" className="bg-[#f0f2ea] py-16 md:py-24">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-[470px_1fr] gap-10 items-end">
-          <ProductCard product={largeProduct} imageHeight={626} />
+          {/* Left: large product */}
+          {large && <ProductItem product={large} loading="eager" />}
 
+          {/* Right: text + 2 small products */}
           <div className="flex flex-col mt-16 md:mt-0">
             <div className="flex flex-col gap-3 mb-16">
               <h2 className="text-2xl font-bold text-black max-w-[452px]">
@@ -40,11 +30,13 @@ export default function ShopCollectionSection() {
               <PrimaryButton text="See More" link="/collections/all" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              {smallProducts.map((product, i) => (
-                <ProductCard key={i} product={product} imageHeight={304} />
-              ))}
-            </div>
+            {small.length > 0 && (
+              <div className="grid grid-cols-2 gap-4">
+                {small.slice(0, 2).map((p) => (
+                  <ProductItem key={p.id} product={p} loading="lazy" />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

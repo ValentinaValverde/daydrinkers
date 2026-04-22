@@ -1,40 +1,19 @@
+import type {ProductItemFragment} from 'storefrontapi.generated';
 import PrimaryButton from '~/components/ui/Button';
-import ProductCard from '~/components/ui/ProductCard';
+import {ProductItem} from '~/components/ProductItem';
 
-const largeProduct = {
-  image: 'https://placehold.co/470x626/c8b49a/4a3a2a?text=.',
-  name: 'Daydrinkers Two Year Tee',
-  price: '$35',
-};
+export default function WinterCollectionSection({
+  products,
+}: {
+  products: ProductItemFragment[];
+}) {
+  const [large, ...small] = products;
 
-const smallProducts = [
-  {
-    image: 'https://placehold.co/207x304/b8a48a/4a3a2a?text=.',
-    name: 'Cafe Ballet Cuff Sock',
-    price: '$35',
-  },
-  {
-    image: 'https://placehold.co/225x304/c2ae94/4a3a2a?text=.',
-    name: 'Spilled Milk Socks',
-    price: '$35',
-  },
-  {
-    image: 'https://placehold.co/207x304/b8a48a/4a3a2a?text=.',
-    name: 'Cafe Latte Hoodie',
-    price: '$65',
-  },
-  {
-    image: 'https://placehold.co/225x304/c2ae94/4a3a2a?text=.',
-    name: 'Morning Fog Tote',
-    price: '$28',
-  },
-];
-
-export default function WinterCollectionSection() {
   return (
-    <section id="collection" className="bg-[#f0f2ea] py-16 md:py-64">
+    <section id="collection" className="bg-[#f0f2ea] py-16 md:py-24">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-[470px_1fr] gap-10 items-end">
+          {/* Left: text + large product */}
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3">
               <h2 className="text-2xl font-bold text-black max-w-[463px]">
@@ -45,23 +24,28 @@ export default function WinterCollectionSection() {
                 faucibus ex sapien vitae pellentesque sem placerat. In id cursus
                 mi pretium tellus duis convallis.
               </p>
-              <PrimaryButton text="See More" link="/collections/all" />
+              <PrimaryButton text="See More" link="/collections/winter" />
             </div>
-            <ProductCard product={largeProduct} imageHeight={600} />
+            {large && <ProductItem product={large} loading="eager" />}
           </div>
 
-          <div className="flex flex-col gap-8 pt-0 md:pt-[172px]">
-            <div className="grid grid-cols-2 gap-4">
-              {smallProducts.slice(0, 2).map((product, i) => (
-                <ProductCard key={i} product={product} imageHeight={350} />
-              ))}
+          {/* Right: 2×2 grid of small products */}
+          {small.length > 0 && (
+            <div className="flex flex-col gap-4 pt-0 md:pt-[172px]">
+              <div className="grid grid-cols-2 gap-4">
+                {small.slice(0, 2).map((p, i) => (
+                  <ProductItem key={p.id} product={p} loading={i < 2 ? 'eager' : 'lazy'} />
+                ))}
+              </div>
+              {small.length > 2 && (
+                <div className="grid grid-cols-2 gap-4">
+                  {small.slice(2, 4).map((p) => (
+                    <ProductItem key={p.id} product={p} loading="lazy" />
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {smallProducts.slice(2, 4).map((product, i) => (
-                <ProductCard key={i} product={product} imageHeight={350} />
-              ))}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
