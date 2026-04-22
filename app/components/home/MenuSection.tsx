@@ -20,10 +20,10 @@ export default function MenuSection() {
             </h2>
             <p className="text-base text-[#f0f2ea]">
               Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-              faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-              pretium tellus duis convallis.
+              faucibus ex sapien vitae pellentesque sem placerat. In id cursus
+              mi pretium tellus duis convallis.
             </p>
-            <SecondaryButton text="Explore Options" link="/pages/menu" />
+            <SecondaryButton text="Explore Options" link="/menu" />
           </div>
 
           {/* Mobile: single image */}

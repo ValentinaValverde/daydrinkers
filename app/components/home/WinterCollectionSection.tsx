@@ -14,7 +14,7 @@ export default function WinterCollectionSection({
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-[470px_1fr] gap-10 items-end">
           {/* Left: text + large product */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-24">
             <div className="flex flex-col gap-3">
               <h2 className="text-2xl font-bold text-black max-w-[463px]">
                 Shop our Winter Collection.
@@ -24,7 +24,10 @@ export default function WinterCollectionSection({
                 faucibus ex sapien vitae pellentesque sem placerat. In id cursus
                 mi pretium tellus duis convallis.
               </p>
-              <PrimaryButton text="See More" link="/collections/winter" />
+              <PrimaryButton
+                text="See More"
+                link="/collections/winter-edit/Winter-collection"
+              />
             </div>
             {large && <ProductItem product={large} loading="eager" />}
           </div>
@@ -34,7 +37,11 @@ export default function WinterCollectionSection({
             <div className="flex flex-col gap-4 pt-0 md:pt-[172px]">
               <div className="grid grid-cols-2 gap-4">
                 {small.slice(0, 2).map((p, i) => (
-                  <ProductItem key={p.id} product={p} loading={i < 2 ? 'eager' : 'lazy'} />
+                  <ProductItem
+                    key={p.id}
+                    product={p}
+                    loading={i < 2 ? 'eager' : 'lazy'}
+                  />
                 ))}
               </div>
               {small.length > 2 && (

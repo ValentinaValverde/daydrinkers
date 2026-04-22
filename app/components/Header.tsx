@@ -25,7 +25,7 @@ export function Header({
   cart,
   publicStoreDomain,
 }: HeaderProps) {
-  const {shop, menu} = header;
+  const {shop} = header;
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -63,12 +63,7 @@ export function Header({
           </NavLink>
 
           {/* Desktop nav */}
-          <HeaderMenu
-            menu={menu}
-            viewport="desktop"
-            primaryDomainUrl={header.shop.primaryDomain.url}
-            publicStoreDomain={publicStoreDomain}
-          />
+          <HeaderMenu viewport="desktop" />
 
           {/* Icons */}
           <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
@@ -78,70 +73,50 @@ export function Header({
   );
 }
 
-export function HeaderMenu({
-  menu,
-  primaryDomainUrl,
-  viewport,
-  publicStoreDomain,
-}: {
-  menu: HeaderProps['header']['menu'];
-  primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
-  viewport: Viewport;
-  publicStoreDomain: HeaderProps['publicStoreDomain'];
-}) {
+const NAV_LINKS = [
+  {title: 'Shop', url: '/collections/all'},
+  {title: 'Winter Collection', url: '/collections/winter-collection'},
+  {title: 'Menu', url: '/menu'},
+  {title: 'Locations', url: '/locations'},
+];
+
+export function HeaderMenu({viewport}: {viewport: Viewport}) {
   const {close} = useAside();
 
   if (viewport === 'mobile') {
     return (
       <nav className="flex flex-col gap-4 p-6" role="navigation">
-        <NavLink
-          end
-          onClick={close}
-          prefetch="intent"
-          to="/"
-          className="text-sm text-black hover:opacity-60 transition-opacity"
-        >
-          Home
-        </NavLink>
-        {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-          if (!item.url) return null;
-          const url = resolveUrl(item.url, publicStoreDomain, primaryDomainUrl);
-          return (
-            <NavLink
-              className="text-sm text-black hover:opacity-60 transition-opacity"
-              end
-              key={item.id}
-              onClick={close}
-              prefetch="intent"
-              to={url}
-            >
-              {item.title}
-            </NavLink>
-          );
-        })}
+        {NAV_LINKS.map((link) => (
+          <NavLink
+            className="text-sm text-black hover:opacity-60 transition-opacity"
+            end
+            key={link.url}
+            onClick={close}
+            prefetch="intent"
+            to={link.url}
+          >
+            {link.title}
+          </NavLink>
+        ))}
       </nav>
     );
   }
 
   return (
     <nav className="hidden md:flex gap-16 text-sm text-black" role="navigation">
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-        if (!item.url) return null;
-        const url = resolveUrl(item.url, publicStoreDomain, primaryDomainUrl);
-        return (
-          <NavLink
-            className={({isActive}) =>
-              `hover:opacity-60 transition-opacity${isActive ? ' font-semibold' : ''}`
-            }
-            end
-            key={item.id}
-            prefetch="intent"
-            to={url}
-          >
-            {item.title}
-          </NavLink>
-        );
-      })}
+      {NAV_LINKS.map((link) => (
+        <NavLink
+          className={({isActive}) =>
+            `hover:opacity-60 transition-opacity${isActive ? ' font-semibold' : ''}`
+          }
+          end
+          key={link.url}
+          prefetch="intent"
+          to={link.url}
+        >
+          {link.title}
+        </NavLink>
+      ))}
     </nav>
   );
 }
@@ -223,56 +198,3 @@ function CartBanner() {
   return <CartBadge count={cart?.totalQuantity ?? 0} />;
 }
 
-function resolveUrl(
-  url: string,
-  publicStoreDomain: string,
-  primaryDomainUrl: string,
-) {
-  return url.includes('myshopify.com') ||
-    url.includes(publicStoreDomain) ||
-    url.includes(primaryDomainUrl)
-    ? new URL(url).pathname
-    : url;
-}
-
-const FALLBACK_HEADER_MENU = {
-  id: 'gid://shopify/Menu/199655587896',
-  items: [
-    {
-      id: 'gid://shopify/MenuItem/461609500728',
-      resourceId: null,
-      tags: [],
-      title: 'Collections',
-      type: 'HTTP',
-      url: '/collections',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461609533496',
-      resourceId: null,
-      tags: [],
-      title: 'Blog',
-      type: 'HTTP',
-      url: '/blogs/journal',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461609566264',
-      resourceId: null,
-      tags: [],
-      title: 'Policies',
-      type: 'HTTP',
-      url: '/policies',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461609599032',
-      resourceId: 'gid://shopify/Page/92591030328',
-      tags: [],
-      title: 'About',
-      type: 'PAGE',
-      url: '/pages/about',
-      items: [],
-    },
-  ],
-};
