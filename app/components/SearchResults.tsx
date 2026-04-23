@@ -43,7 +43,7 @@ function SearchResultsArticles({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-black mb-6">Articles</h2>
+      <h2 className="text-3xl font-bold text-black mb-6">Articles</h2>
       <div className="space-y-3">
         {articles?.nodes?.map((article) => {
           const articleUrl = urlWithTrackingParams({
@@ -75,7 +75,7 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-black mb-6">Pages</h2>
+      <h2 className="text-3xl font-bold text-black mb-6">Pages</h2>
       <div className="space-y-3">
         {pages?.nodes?.map((page) => {
           const pageUrl = urlWithTrackingParams({
@@ -134,7 +134,7 @@ function SearchResultsProducts({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-black mb-8">Products</h2>
+      <h2 className="text-3xl font-bold text-black mb-8">Products</h2>
       <Pagination connection={products}>
         {({nodes, isLoading, NextLink, PreviousLink}) => {
           let sorted = [...nodes];
@@ -142,14 +142,22 @@ function SearchResultsProducts({
           if (sortBy === 'price-asc')
             sorted.sort(
               (a, b) =>
-                parseFloat(a.selectedOrFirstAvailableVariant?.price?.amount ?? '0') -
-                parseFloat(b.selectedOrFirstAvailableVariant?.price?.amount ?? '0'),
+                parseFloat(
+                  a.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ) -
+                parseFloat(
+                  b.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ),
             );
           else if (sortBy === 'price-desc')
             sorted.sort(
               (a, b) =>
-                parseFloat(b.selectedOrFirstAvailableVariant?.price?.amount ?? '0') -
-                parseFloat(a.selectedOrFirstAvailableVariant?.price?.amount ?? '0'),
+                parseFloat(
+                  b.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ) -
+                parseFloat(
+                  a.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ),
             );
           else if (sortBy === 'title-asc')
             sorted.sort((a, b) => a.title.localeCompare(b.title));

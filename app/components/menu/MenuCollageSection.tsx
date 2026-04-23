@@ -56,7 +56,7 @@ export default function MenuCollageSection() {
 
           {/* Text block — spans cols 2–4, rows 2–3 */}
           <div className="col-span-3 row-span-2 flex flex-col gap-5 px-4 md:px-8">
-            <h2 className="text-2xl font-bold text-black leading-snug">
+            <h2 className="text-3xl font-bold text-black leading-snug">
               Looking for something more permanent?
             </h2>
             <p className="text-base text-black">

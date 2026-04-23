@@ -97,7 +97,7 @@ export default function ContactSection() {
           {/* Right: contact form */}
           <div className="flex flex-col gap-6">
             <div>
-              <h2 className="text-2xl font-bold text-black">
+              <h2 className="text-3xl font-bold text-black">
                 We would love to chat!
               </h2>
               <p className="text-base text-black mt-2">

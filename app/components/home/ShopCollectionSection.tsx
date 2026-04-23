@@ -19,7 +19,7 @@ export default function ShopCollectionSection({
           {/* Right: text + 2 small products */}
           <div className="flex flex-col mt-16 md:mt-0">
             <div className="flex flex-col gap-3 mb-8">
-              <h2 className="text-2xl font-bold text-black max-w-[452px]">
+              <h2 className="text-3xl font-bold text-black max-w-[452px]">
                 Shop from our collection
               </h2>
               <p className="text-base text-black max-w-[452px]">

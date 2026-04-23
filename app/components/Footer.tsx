@@ -25,7 +25,7 @@ export function Footer({
       <div className="bg-gradient-to-b from-[#e4ceb4] to-[#e1ac77]">
         {/* Made with Love */}
         <div className="flex flex-col items-center pt-32 pb-10 gap-4 text-center px-8">
-          <h2 className="text-2xl font-bold text-black">Made with Love</h2>
+          <h2 className="text-3xl font-bold text-black">Made with Love</h2>
           <p className="text-base text-black max-w-[603px]">
             Comfy apparel, top notch drinks, cool people. Come find us in
             Greenville, SC.

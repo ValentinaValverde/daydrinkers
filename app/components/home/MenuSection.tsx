@@ -15,7 +15,7 @@ export default function MenuSection() {
           style={{minHeight: '800px'}}
         >
           <div className="flex flex-col gap-6 pt-16 md:pt-32 max-w-[440px] relative z-10">
-            <h2 className="text-2xl font-bold text-[#f0f2ea]">
+            <h2 className="text-3xl font-bold text-[#f0f2ea]">
               Looking for our menu?
             </h2>
             <p className="text-base text-[#f0f2ea]">

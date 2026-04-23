@@ -160,7 +160,9 @@ function ProductGallery({
                   openLightbox(i);
                 }}
                 className={`rounded-[32px] overflow-hidden border-2 transition-colors duration-300 cursor-zoom-in ${
-                  selected === i ? 'border-black' : 'border-transparent hover:border-black'
+                  selected === i
+                    ? 'border-black'
+                    : 'border-transparent hover:border-black'
                 }`}
               >
                 <Image
@@ -253,7 +255,7 @@ function RelatedProducts({
             <section className="bg-[#f0f2ea] py-16 md:py-24">
               <div className="max-w-screen-xl mx-auto px-6 md:px-8">
                 <div className="mb-10">
-                  <h2 className="text-2xl font-bold text-black">
+                  <h2 className="text-3xl font-bold text-black">
                     There&apos;s more where that came from...
                   </h2>
                   <p className="text-base text-black mt-2">

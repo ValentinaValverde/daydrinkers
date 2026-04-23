@@ -1,8 +1,17 @@
 import ScallopBorder from '~/components/ui/ScallopBorder';
 
 const drinks = [
-  'Espresso', 'Americano', 'Espresso Tonic', 'Macchiato', 'Cortado',
-  'Cappuccino', 'Latte', 'Homemade Nitro Cold Brew', 'Drip', 'Chai', 'Matcha',
+  'Espresso',
+  'Americano',
+  'Espresso Tonic',
+  'Macchiato',
+  'Cortado',
+  'Cappuccino',
+  'Latte',
+  'Homemade Nitro Cold Brew',
+  'Drip',
+  'Chai',
+  'Matcha',
 ];
 
 function MenuRow({name, price}: {name: string; price: string}) {
@@ -26,7 +35,7 @@ export default function MenuDrinksSection() {
         <div className="max-w-screen-xl mx-auto pt-16">
           <div className="grid md:grid-cols-2 gap-16">
             <div>
-              <h2 className="text-2xl font-semibold text-black text-center mb-2">
+              <h2 className="text-3xl font-semibold text-black text-center mb-2">
                 Drinks
               </h2>
               <p className="text-base text-black text-center mb-8">
@@ -40,7 +49,7 @@ export default function MenuDrinksSection() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-black text-center mb-2">
+              <h2 className="text-3xl font-semibold text-black text-center mb-2">
                 Tea
               </h2>
               <p className="text-base text-black text-center mb-8">

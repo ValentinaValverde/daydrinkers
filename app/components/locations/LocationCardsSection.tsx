@@ -12,7 +12,7 @@ const locations = [
     name: 'Seneca Daydrinkers',
     address: '307 E North 1st Street Seneca, SC 29678',
     description:
-      'Our Seneca spot brings the same good vibes to the upstate. Come hang out, grab a pastry, and stay a while — we\'ve got plenty of room.',
+      "Our Seneca spot brings the same good vibes to the upstate. Come hang out, grab a pastry, and stay a while — we've got plenty of room.",
     image: '/images/greenville-location.png',
     link: 'https://www.google.com/maps?daddr=307+E+North+1st+St,+Seneca,+SC+29678',
     reversed: true,
@@ -47,7 +47,9 @@ export default function LocationCardsSection() {
             {/* Details */}
             <div className="w-full md:w-1/2 flex flex-col gap-4">
               <div>
-                <h2 className="text-2xl font-medium text-black">{location.name}</h2>
+                <h2 className="text-3xl font-medium text-black">
+                  {location.name}
+                </h2>
                 <p className="text-base text-black mt-1">{location.address}</p>
               </div>
               <p className="text-base text-black">{location.description}</p>

@@ -16,7 +16,7 @@ export default function WinterCollectionSection({
           {/* Left: text + large product */}
           <div className="flex flex-col gap-24">
             <div className="flex flex-col gap-3">
-              <h2 className="text-2xl font-bold text-black max-w-[463px]">
+              <h2 className="text-3xl font-bold text-black max-w-[463px]">
                 Shop our Winter Collection.
               </h2>
               <p className="text-base text-black max-w-[470px]">

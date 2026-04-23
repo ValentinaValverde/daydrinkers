@@ -22,7 +22,9 @@ export default function MenuSyrupsSection() {
 
       <section className="bg-[#5c5043] rounded-b-[32px] overflow-hidden">
         <div className="text-center pt-16 pb-10 px-6">
-          <h2 className="text-2xl font-semibold text-white">House-Made Syrups</h2>
+          <h2 className="text-3xl font-semibold text-white">
+            House-Made Syrups
+          </h2>
           <p className="text-base text-white mt-2 opacity-80">
             This is what it looks like when there are no photos.
           </p>
@@ -34,7 +36,9 @@ export default function MenuSyrupsSection() {
               key={syrup.name}
               onMouseEnter={() => setActive(syrup.name)}
               className={`cursor-default transition-all duration-200 ${
-                active === syrup.name ? 'font-bold' : 'opacity-60 hover:opacity-90'
+                active === syrup.name
+                  ? 'font-bold'
+                  : 'opacity-60 hover:opacity-90'
               }`}
             >
               {syrup.name}
@@ -55,7 +59,9 @@ export default function MenuSyrupsSection() {
                 src={syrup.image}
                 alt={syrup.name}
                 className={`w-full h-[320px] object-cover rounded-t-2xl ${
-                  active === syrup.name ? 'shadow-[-4px_4px_0_0_rgba(0,0,0,0.5)]' : ''
+                  active === syrup.name
+                    ? 'shadow-[-4px_4px_0_0_rgba(0,0,0,0.5)]'
+                    : ''
                 }`}
               />
             </div>

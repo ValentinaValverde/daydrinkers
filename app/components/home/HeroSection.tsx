@@ -20,7 +20,7 @@ export default function HeroSection() {
       />
       <div className="absolute inset-0 bg-black/35" />
       <div className="relative z-10 flex flex-col items-center justify-center h-full gap-8 px-6 md:px-8">
-        <h1 className="text-white text-3xl md:text-5xl font-semibold text-center max-w-[751px] leading-tight">
+        <h1 className="text-white text-3xl md:text-5xl font-semibold text-center leading-tight">
           Comfy apparel, top notch drinks, cool people.
         </h1>
         <SecondaryButton text="Shop Now" link="/collections/all" />

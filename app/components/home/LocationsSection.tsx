@@ -18,7 +18,9 @@ export default function LocationsSection() {
     <section id="locations" className="bg-[#f0f2ea] py-16 md:py-64">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="text-left md:text-right mb-8 md:-mb-8">
-          <h2 className="text-2xl font-bold text-black">You can find us here!</h2>
+          <h2 className="text-3xl font-bold text-black">
+            You can find us here!
+          </h2>
           <p className="text-base text-black mt-2">
             Lorem ipsum dolor sit amet consectetur adipiscing elit.
           </p>

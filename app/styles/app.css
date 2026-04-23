@@ -11,12 +11,25 @@
 body {
   background-color: #f0f2ea;
   color: #1a1a1a;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Schoolbell', cursive;
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
@@ -50,7 +63,7 @@ body {
   }
 
   h2 {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1.4;
   }
