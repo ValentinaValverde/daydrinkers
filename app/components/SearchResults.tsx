@@ -1,5 +1,6 @@
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {Link} from 'react-router';
+import {CaretUp, CaretDown, Check} from '@phosphor-icons/react';
 import {Image, Money, Pagination} from '@shopify/hydrogen';
 import {urlWithTrackingParams, type RegularSearchReturn} from '~/lib/search';
 import {ProductItem} from '~/components/ProductItem';
@@ -101,17 +102,79 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
 
 const SORT_OPTIONS = [
   {label: 'Relevance', value: 'relevance'},
-  {label: 'Price: Low → High', value: 'price-asc'},
-  {label: 'Price: High → Low', value: 'price-desc'},
-  {label: 'A → Z', value: 'title-asc'},
+  {label: 'A to Z', value: 'title-asc'},
+  {label: 'Price: Low to high', value: 'price-asc'},
+  {label: 'Price: High to low', value: 'price-desc'},
 ];
 
 const PRICE_FILTERS = [
   {label: 'All prices', value: 'all'},
   {label: 'Under $50', value: 'under-50'},
-  {label: '$50–$100', value: '50-100'},
+  {label: '$50 - $100', value: '50-100'},
   {label: 'Over $100', value: 'over-100'},
 ];
+
+const AVAILABILITY_OPTIONS = [
+  {label: 'All', value: 'all'},
+  {label: 'In stock', value: 'in-stock'},
+  {label: 'Out of stock', value: 'out-of-stock'},
+];
+
+function FilterDropdown({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: {label: string; value: string}[];
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selectedLabel = options.find((o) => o.value === value)?.label ?? value;
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center gap-1.5 text-base"
+      >
+        <span className="font-semibold">{label}:</span>
+        <span>{selectedLabel}</span>
+        {open ? <CaretUp size={14} /> : <CaretDown size={14} />}
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-2 z-20 bg-white border border-black rounded-lg p-4 flex flex-col gap-3 min-w-[160px]">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => {
+                onChange(opt.value);
+                setOpen(false);
+              }}
+              className="flex items-center justify-between gap-6 text-left text-base hover:opacity-60 transition-opacity"
+            >
+              <span>{opt.label}</span>
+              {value === opt.value && <Check size={16} />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function SearchResultsProducts({
   term,
@@ -119,6 +182,7 @@ function SearchResultsProducts({
 }: PartialSearchResult<'products'>) {
   const [sortBy, setSortBy] = useState('relevance');
   const [priceFilter, setPriceFilter] = useState('all');
+  const [availability, setAvailability] = useState('all');
 
   if (!products?.nodes.length) {
     return null;
@@ -157,41 +221,34 @@ function SearchResultsProducts({
             });
           }
 
+          if (availability !== 'all') {
+            sorted = sorted.filter((product) => {
+              const inStock = product.selectedOrFirstAvailableVariant != null;
+              return availability === 'in-stock' ? inStock : !inStock;
+            });
+          }
+
           return (
             <div>
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-3 mb-8">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-medium text-black/50">Sort:</span>
-                  {SORT_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setSortBy(opt.value)}
-                      className={`rounded-full px-5 h-[40px] text-sm font-medium border-2 transition-colors ${
-                        sortBy === opt.value
-                          ? 'bg-[#3c6d8e] text-white border-[#3c6d8e]'
-                          : 'bg-transparent text-black border-black hover:bg-black hover:text-white'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-medium text-black/50">Price:</span>
-                  {PRICE_FILTERS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => setPriceFilter(opt.value)}
-                      className={`rounded-full px-5 h-[40px] text-sm font-medium border-2 transition-colors ${
-                        priceFilter === opt.value
-                          ? 'bg-[#3c6d8e] text-white border-[#3c6d8e]'
-                          : 'bg-transparent text-black border-black hover:bg-black hover:text-white'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-8 mb-8">
+                <FilterDropdown
+                  label="Availability"
+                  value={availability}
+                  options={AVAILABILITY_OPTIONS}
+                  onChange={setAvailability}
+                />
+                <FilterDropdown
+                  label="Price"
+                  value={priceFilter}
+                  options={PRICE_FILTERS}
+                  onChange={setPriceFilter}
+                />
+                <FilterDropdown
+                  label="Sort by"
+                  value={sortBy}
+                  options={SORT_OPTIONS}
+                  onChange={setSortBy}
+                />
               </div>
 
               <div className="flex justify-center mb-8">
