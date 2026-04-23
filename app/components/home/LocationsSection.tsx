@@ -22,7 +22,7 @@ export default function LocationsSection() {
             You can find us here!
           </h2>
           <p className="text-base text-black mt-2">
-            Lorem ipsum dolor sit amet consectetur adipiscing elit.
+            Two spots, one vibe. Stop by and say hi — we'd love to see you.
           </p>
         </div>
 

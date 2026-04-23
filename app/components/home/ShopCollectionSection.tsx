@@ -23,9 +23,8 @@ export default function ShopCollectionSection({
                 Shop from our collection
               </h2>
               <p className="text-base text-black max-w-[452px]">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-                faucibus ex sapien vitae pellentesque sem placerat. In id cursus
-                mi pretium tellus duis convallis.
+                Wear the vibe. From tees to hats, our collection lets you take
+                a little piece of Daydrinkers wherever you go.
               </p>
               <PrimaryButton text="See More" link="/collections/all" />
             </div>

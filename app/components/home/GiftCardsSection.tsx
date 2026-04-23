@@ -7,9 +7,8 @@ export default function GiftCardsSection() {
       <CheckeredBorder>
         <div className="flex flex-col items-center justify-center gap-10 py-16 px-6 md:py-20 md:px-24 text-center">
           <p className="text-2xl text-black max-w-[526px] leading-relaxed">
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-            faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-            pretium tellus duis convallis.
+            Give the gift of good taste. Our gift cards are perfect for the
+            coffee lovers, snack fiends, and Daydrinkers fans in your life.
           </p>
           <PrimaryButton
             text="Gift Cards"

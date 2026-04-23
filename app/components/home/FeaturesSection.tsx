@@ -1,17 +1,17 @@
 const features = [
   {
     title: 'Comfy apparel',
-    description: 'Lorem ipsum dolor sit amet consectetur adipiscing.',
+    description: "Tees, hats, and more — designed for people who like to look good while they take it easy.",
     icon: '/seashell.svg',
   },
   {
     title: 'Top notch drinks',
-    description: 'Lorem ipsum dolor sit amet consectetur adipiscing.',
+    description: "Espresso, cold brew, seasonal specials. We take our drinks seriously so you don't have to.",
     icon: '/kettle.svg',
   },
   {
     title: 'Cool people',
-    description: 'Lorem ipsum dolor sit amet consectetur adipiscing.',
+    description: 'Our crew makes the difference. Come for the coffee, stay for the conversation.',
     icon: '/cards.svg',
   },
 ];

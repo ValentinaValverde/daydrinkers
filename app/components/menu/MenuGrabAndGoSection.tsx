@@ -13,7 +13,7 @@ export default function MenuGrabAndGoSection() {
       <div className="text-center mb-12">
         <h2 className="text-3xl font-semibold text-black">Grab &amp; Go</h2>
         <p className="text-base text-black mt-2">
-          Lorem ipsum dolor sit amet consectetur adipiscing elit.
+          Perfect for busy mornings or afternoon cravings — grab something good on your way.
         </p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">

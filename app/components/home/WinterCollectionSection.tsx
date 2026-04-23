@@ -20,9 +20,9 @@ export default function WinterCollectionSection({
                 Shop our Winter Collection.
               </h2>
               <p className="text-base text-black max-w-[470px]">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-                faucibus ex sapien vitae pellentesque sem placerat. In id cursus
-                mi pretium tellus duis convallis.
+                Cozy up in style. Our winter edit is packed with warm layers,
+                comfy fits, and everything you need to stay looking good when
+                the temperature drops.
               </p>
               <PrimaryButton
                 text="See More"

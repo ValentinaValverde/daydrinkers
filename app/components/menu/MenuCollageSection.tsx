@@ -60,9 +60,9 @@ export default function MenuCollageSection() {
               Looking for something more permanent?
             </h2>
             <p className="text-base text-black">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-              faucibus ex sapien vitae pellentesque sem placerat. In id cursus
-              mi pretium tellus duis convallis.
+              Love the Daydrinkers vibe? Take it home. Browse our full
+              collection of apparel and goods made for people who like to keep
+              it easy.
             </p>
             <PrimaryButton text="Shop Now" link="/collections" />
           </div>

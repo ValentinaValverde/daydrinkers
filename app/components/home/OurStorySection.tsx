@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import ScallopBorder from '~/components/ui/ScallopBorder';
 
 const TEXT =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  'We started Daydrinkers because we believed a great drink deserved a great atmosphere. Born in the South Carolina foothills, we\'re part café, part gathering place — a spot where good coffee, fresh pastries, and good company all collide. Whether you\'re starting your morning or stretching your afternoon, we\'re here for it.';
 
 export default function OurStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
