@@ -102,10 +102,9 @@ export default function SearchPage() {
             <SearchResults.Empty />
           ) : (
             <SearchResults result={result} term={term}>
-              {({articles, pages, products, term}) => (
+              {({articles, products, term}) => (
                 <div className="space-y-16">
                   <SearchResults.Products products={products} term={term} />
-                  <SearchResults.Pages pages={pages} term={term} />
                   <SearchResults.Articles articles={articles} term={term} />
                 </div>
               )}
@@ -164,16 +163,6 @@ const SEARCH_PRODUCT_FRAGMENT = `#graphql
   }
 ` as const;
 
-const SEARCH_PAGE_FRAGMENT = `#graphql
-  fragment SearchPage on Page {
-     __typename
-     handle
-    id
-    title
-    trackingParameters
-  }
-` as const;
-
 const SEARCH_ARTICLE_FRAGMENT = `#graphql
   fragment SearchArticle on Article {
     __typename
@@ -215,17 +204,6 @@ export const SEARCH_QUERY = `#graphql
         }
       }
     }
-    pages: search(
-      query: $term,
-      types: [PAGE],
-      first: $first,
-    ) {
-      nodes {
-        ...on Page {
-          ...SearchPage
-        }
-      }
-    }
     products: search(
       after: $endCursor,
       before: $startCursor,
@@ -247,7 +225,6 @@ export const SEARCH_QUERY = `#graphql
     }
   }
   ${SEARCH_PRODUCT_FRAGMENT}
-  ${SEARCH_PAGE_FRAGMENT}
   ${SEARCH_ARTICLE_FRAGMENT}
   ${PAGE_INFO_FRAGMENT}
 ` as const;
