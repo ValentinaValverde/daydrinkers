@@ -90,7 +90,7 @@ export default function Collection() {
       <ShopHero />
       <section className="py-16 md:py-24">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          <div className="flex flex-wrap gap-8 mb-10">
+          {/* <div className="flex flex-wrap gap-8 mb-10">
             <FilterDropdown
               label="Availability"
               value={availability}
@@ -109,7 +109,7 @@ export default function Collection() {
               options={SORT_OPTIONS}
               onChange={setSortBy}
             />
-          </div>
+          </div> */}
           <PaginatedResourceSection<CollectionItemFragment>
             connection={products}
             resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
