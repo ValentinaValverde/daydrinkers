@@ -1,6 +1,7 @@
 import type {Route} from './+types/collections.all';
 import {useLoaderData} from 'react-router';
 import {useEffect, useState} from 'react';
+import {FilterDropdown} from '~/components/ui/FilterDropdown';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
@@ -58,31 +59,56 @@ function ShopHero() {
   );
 }
 
+const AVAILABILITY_OPTIONS = [
+  {label: 'All', value: 'all'},
+  {label: 'In stock', value: 'in-stock'},
+  {label: 'Out of stock', value: 'out-of-stock'},
+];
+
+const PRICE_OPTIONS = [
+  {label: 'All prices', value: 'all'},
+  {label: 'Under $50', value: 'under-50'},
+  {label: '$50 - $100', value: '50-100'},
+  {label: 'Over $100', value: 'over-100'},
+];
+
+const SORT_OPTIONS = [
+  {label: 'Best Selling', value: 'best-selling'},
+  {label: 'Price: Low to high', value: 'price-asc'},
+  {label: 'Price: High to low', value: 'price-desc'},
+  {label: 'Newest', value: 'newest'},
+];
+
 export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
+  const [availability, setAvailability] = useState('all');
+  const [price, setPrice] = useState('all');
+  const [sortBy, setSortBy] = useState('best-selling');
 
   return (
     <div className="min-h-screen bg-[#f0f2ea]">
       <ShopHero />
       <section className="py-16 md:py-24">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-10">
-            <div className="flex gap-3">
-              <button className="border border-black rounded-full px-5 h-10 text-sm text-black hover:bg-black hover:text-[#f0f2ea] transition-colors">
-                Availability
-              </button>
-              <button className="border border-black rounded-full px-5 h-10 text-sm text-black hover:bg-black hover:text-[#f0f2ea] transition-colors">
-                Price
-              </button>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-black">
-              <select className="border border-black rounded-full px-4 h-10 text-sm bg-transparent appearance-none pr-8 cursor-pointer focus:outline-none">
-                <option>Best Selling</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest</option>
-              </select>
-            </div>
+          <div className="flex flex-wrap gap-8 mb-10">
+            <FilterDropdown
+              label="Availability"
+              value={availability}
+              options={AVAILABILITY_OPTIONS}
+              onChange={setAvailability}
+            />
+            <FilterDropdown
+              label="Price"
+              value={price}
+              options={PRICE_OPTIONS}
+              onChange={setPrice}
+            />
+            <FilterDropdown
+              label="Sort by"
+              value={sortBy}
+              options={SORT_OPTIONS}
+              onChange={setSortBy}
+            />
           </div>
           <PaginatedResourceSection<CollectionItemFragment>
             connection={products}
