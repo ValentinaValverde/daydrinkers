@@ -1,4 +1,5 @@
-import {useLoaderData} from 'react-router';
+import {useState, useRef} from 'react';
+import {useLoaderData, useSubmit} from 'react-router';
 import type {Route} from './+types/search';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
@@ -40,12 +41,25 @@ const QUICK_FILTERS = ['Hoodies', 'Socks', 'Sweaters'];
  */
 export default function SearchPage() {
   const {type, term, result, error} = useLoaderData<typeof loader>();
+  const submit = useSubmit();
+  const debounceTimer = useRef<ReturnType<typeof setTimeout>>();
+  const [inputValue, setInputValue] = useState(term);
+
   if (type === 'predictive') return null;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      submit({q: value}, {method: 'get', action: '/search'});
+    }, 300);
+  };
 
   return (
     <div className="min-h-screen bg-[#f0f2ea]">
       {/* Hero */}
-      <section className="relative w-full bg-[#e4ceb4] rounded-b-[54px] pt-[100px] pb-16 md:pb-20 overflow-hidden">
+      <section className="relative w-full pt-[100px] pb-16 md:pb-20 overflow-hidden">
         <div className="flex flex-col items-center justify-center gap-4 px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-black">Search</h1>
           <p className="max-w-[452px] text-black opacity-80">
@@ -55,7 +69,8 @@ export default function SearchPage() {
           <SearchForm className="w-full md:w-[45%] mt-6">
             {({inputRef}) => (
               <input
-                defaultValue={term}
+                value={inputValue}
+                onChange={handleChange}
                 name="q"
                 placeholder="Search products..."
                 ref={inputRef}
