@@ -305,7 +305,7 @@ function SearchAside() {
                 {term.current && total && (
                   <Link onClick={closeSearch} to={`/search?q=${term.current}`}>
                     <p>
-                      View all results for <q>{term.current}</q> →
+                      View all results for <q>{term.current}</q>
                     </p>
                   </Link>
                 )}

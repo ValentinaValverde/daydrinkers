@@ -102,7 +102,9 @@ function SearchAside() {
             const {articles, collections, pages, products, queries} = items;
 
             if (state === 'loading' && term.current) {
-              return <div className="text-sm text-black/50 py-4">Searching...</div>;
+              return (
+                <div className="text-sm text-black/50 py-4">Searching...</div>
+              );
             }
 
             if (!total) {
@@ -141,7 +143,7 @@ function SearchAside() {
                     to={`${SEARCH_ENDPOINT}?q=${term.current}`}
                     className="block text-center text-sm font-medium text-[#3c6d8e] hover:opacity-70 transition-opacity mt-4 pt-4 border-t border-black/10"
                   >
-                    View all results for &ldquo;{term.current}&rdquo; →
+                    View all results for &ldquo;{term.current}&rdquo;
                   </Link>
                 ) : null}
               </div>

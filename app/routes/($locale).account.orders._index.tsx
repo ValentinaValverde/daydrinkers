@@ -100,7 +100,7 @@ function EmptyOrders({hasFilters = false}: {hasFilters?: boolean}) {
           <p>No orders found matching your search.</p>
           <br />
           <p>
-            <Link to="/account/orders">Clear filters →</Link>
+            <Link to="/account/orders">Clear filters</Link>
           </p>
         </>
       ) : (
@@ -108,7 +108,7 @@ function EmptyOrders({hasFilters = false}: {hasFilters?: boolean}) {
           <p>You haven&apos;t placed any orders yet.</p>
           <br />
           <p>
-            <Link to="/collections">Start Shopping →</Link>
+            <Link to="/collections">Start Shopping</Link>
           </p>
         </>
       )}
@@ -214,7 +214,7 @@ function OrderItem({order}: {order: OrderItemFragment}) {
         <p>{order.financialStatus}</p>
         {fulfillmentStatus && <p>{fulfillmentStatus}</p>}
         <Money data={order.totalPrice} />
-        <Link to={`/account/orders/${btoa(order.id)}`}>View Order →</Link>
+        <Link to={`/account/orders/${btoa(order.id)}`}>View Order</Link>
       </fieldset>
       <br />
     </>
