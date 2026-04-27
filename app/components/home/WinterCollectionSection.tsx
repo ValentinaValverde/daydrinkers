@@ -24,10 +24,7 @@ export default function WinterCollectionSection({
                 comfy fits, and everything you need to stay looking good when
                 the temperature drops.
               </p>
-              <PrimaryButton
-                text="See More"
-                link="/collections/winter-edit/Winter-collection"
-              />
+              <PrimaryButton text="See More" link="/collections/winter-edit" />
             </div>
             {large && <ProductItem product={large} loading="eager" />}
           </div>

@@ -88,24 +88,6 @@ export default function Collection() {
       />
       <section className="py-16 md:py-24">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-10">
-            <div className="flex gap-3">
-              <button className="border border-black rounded-full px-5 h-10 text-sm text-black hover:bg-black hover:text-[#f0f2ea] transition-colors">
-                Availability
-              </button>
-              <button className="border border-black rounded-full px-5 h-10 text-sm text-black hover:bg-black hover:text-[#f0f2ea] transition-colors">
-                Price
-              </button>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-black">
-              <select className="border border-black rounded-full px-4 h-10 text-sm bg-transparent appearance-none pr-8 cursor-pointer focus:outline-none">
-                <option>Best Selling</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest</option>
-              </select>
-            </div>
-          </div>
           <PaginatedResourceSection<ProductItemFragment>
             connection={collection.products}
             resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"

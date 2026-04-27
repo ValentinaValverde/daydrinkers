@@ -75,7 +75,7 @@ export function Header({
 
 const NAV_LINKS = [
   {title: 'Shop', url: '/collections/all'},
-  {title: 'Winter Collection', url: '/collections/winter-collection'},
+  {title: 'Winter Collection', url: '/collections/winter-edit'},
   {title: 'Menu', url: '/menu'},
   {title: 'Locations', url: '/locations'},
 ];
@@ -197,4 +197,3 @@ function CartBanner() {
   const cart = useOptimisticCart(originalCart);
   return <CartBadge count={cart?.totalQuantity ?? 0} />;
 }
-
