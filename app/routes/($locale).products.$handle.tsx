@@ -57,7 +57,7 @@ export async function loader(args: Route.LoaderArgs) {
 
 async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
   const {handle} = params;
-  const {storefront} = context;
+  const {storefront, env} = context;
 
   if (!handle) throw new Error('Expected product handle to be defined');
 
@@ -71,7 +71,7 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
 
   redirectIfHandleIsLocalized(request, {handle, data: product});
 
-  return {product};
+  return {product, storeDomain: env.PUBLIC_STORE_DOMAIN};
 }
 
 function loadDeferredData({context}: Route.LoaderArgs, productId: string) {
@@ -283,7 +283,8 @@ function RelatedProducts({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Product() {
-  const {product, recommendations} = useLoaderData<typeof loader>();
+  const {product, recommendations, storeDomain} =
+    useLoaderData<typeof loader>();
 
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
@@ -323,13 +324,14 @@ export default function Product() {
               />
               {product.descriptionHtml && (
                 <div
-                  className="text-base leading-relaxed text-black max-w-[452px] prose"
+                  className="text-base leading-relaxed text-black [&_em]:font-sans [&_em]:text-lg [&_i]:font-sans [&_i]:text-lg"
                   dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
                 />
               )}
               <ProductForm
                 productOptions={productOptions}
                 selectedVariant={selectedVariant}
+                storeDomain={storeDomain}
               />
             </div>
           </div>

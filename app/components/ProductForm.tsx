@@ -1,9 +1,11 @@
+import {useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router';
-import {type MappedProductOptions} from '@shopify/hydrogen';
+import {type MappedProductOptions, ShopPayButton} from '@shopify/hydrogen';
 import type {
   Maybe,
   ProductOptionValueSwatch,
 } from '@shopify/hydrogen/storefront-api-types';
+import {MinusIcon, PlusIcon} from '@phosphor-icons/react';
 import {AddToCartButton} from './AddToCartButton';
 import {useAside} from './Aside';
 import type {ProductFragment} from 'storefrontapi.generated';
@@ -11,12 +13,21 @@ import type {ProductFragment} from 'storefrontapi.generated';
 export function ProductForm({
   productOptions,
   selectedVariant,
+  storeDomain,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
+  storeDomain: string;
 }) {
   const navigate = useNavigate();
   const {open} = useAside();
+  const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [selectedVariant?.id]);
+
+  const available = selectedVariant?.availableForSale ?? false;
 
   return (
     <div className="flex flex-col gap-6">
@@ -98,23 +109,66 @@ export function ProductForm({
         );
       })}
 
+      {/* Quantity selector */}
+      <div className="flex flex-col gap-3">
+        <p className="text-sm text-black/60">Quantity</p>
+        <div className="flex items-center border-2 border-black rounded-full w-fit">
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            disabled={quantity <= 1}
+            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-black/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Decrease quantity"
+          >
+            <MinusIcon size={14} />
+          </button>
+          <span className="w-8 text-center text-sm font-medium select-none">
+            {quantity}
+          </span>
+          <button
+            type="button"
+            onClick={() => setQuantity((q) => q + 1)}
+            className="w-11 h-11 flex items-center justify-center rounded-full hover:bg-black/10 transition-colors"
+            aria-label="Increase quantity"
+          >
+            <PlusIcon size={14} />
+          </button>
+        </div>
+      </div>
+
       <AddToCartButton
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
+        disabled={!selectedVariant || !available}
         onClick={() => open('cart')}
         lines={
           selectedVariant
             ? [
                 {
                   merchandiseId: selectedVariant.id,
-                  quantity: 1,
+                  quantity,
                   selectedVariant,
                 },
               ]
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        {available ? 'Add to cart' : 'Sold out'}
       </AddToCartButton>
+
+      {available && selectedVariant && (
+        <ShopPayButton
+          variantIdsAndQuantities={[{id: selectedVariant.id, quantity}]}
+          storeDomain={storeDomain}
+          width="100%"
+          channel="hydrogen"
+        />
+      )}
+
+      <Link
+        to="/cart"
+        className="text-center text-sm underline underline-offset-4 text-black/60 hover:text-black transition-colors"
+      >
+        More payment options
+      </Link>
     </div>
   );
 }
