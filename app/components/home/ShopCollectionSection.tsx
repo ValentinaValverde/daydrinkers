@@ -10,7 +10,7 @@ export default function ShopCollectionSection({
   const [large, ...small] = products;
 
   return (
-    <section id="shop" className="bg-[#f0f2ea] py-16 md:py-24">
+    <section id="shop" className="bg-[#f0f2ea] py-16 md:py-64">
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-[470px_1fr] gap-10 items-end">
           {/* Left: large product */}
@@ -23,8 +23,8 @@ export default function ShopCollectionSection({
                 Shop from our collection
               </h2>
               <p className="text-base text-black max-w-[452px]">
-                Wear the vibe. From tees to hats, our collection lets you take
-                a little piece of Daydrinkers wherever you go.
+                Wear the vibe. From tees to hats, our collection lets you take a
+                little piece of Daydrinkers wherever you go.
               </p>
               <PrimaryButton text="See More" link="/collections/all" />
             </div>
