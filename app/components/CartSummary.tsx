@@ -18,24 +18,27 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
 
   if (layout === 'page') {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
+        <div className="space-y-4">
+          <CartDiscounts
+            discountCodes={cart?.discountCodes}
+            discountsHeadingId={discountsHeadingId}
+            discountCodeInputId={discountCodeInputId}
+            layout="page"
+          />
+          <CartGiftCard
+            giftCardCodes={cart?.appliedGiftCards}
+            giftCardHeadingId={giftCardHeadingId}
+            giftCardInputId={giftCardInputId}
+            layout="page"
+          />
+        </div>
+
         {cart?.cost?.subtotalAmount?.amount && (
-          <p className="text-sm font-bold text-black">
+          <span className="">
             Subtotal: <Money data={cart.cost.subtotalAmount} />
-          </p>
+          </span>
         )}
-        <CartDiscounts
-          discountCodes={cart?.discountCodes}
-          discountsHeadingId={discountsHeadingId}
-          discountCodeInputId={discountCodeInputId}
-          layout="page"
-        />
-        <CartGiftCard
-          giftCardCodes={cart?.appliedGiftCards}
-          giftCardHeadingId={giftCardHeadingId}
-          giftCardInputId={giftCardInputId}
-          layout="page"
-        />
         <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} layout="page" />
       </div>
     );
@@ -88,7 +91,7 @@ function CartCheckoutActions({
         target="_self"
         className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center w-fit text-base hover:bg-transparent hover:text-black transition-colors"
       >
-        Checkout →
+        Checkout
       </a>
     );
   }
@@ -148,7 +151,7 @@ function CartDiscounts({
               type="text"
               name="discountCode"
               placeholder="Discount code"
-              className="bg-white border border-[#2a6b8f] rounded-full px-4 h-10 text-sm text-black placeholder:text-black/50 focus:outline-none focus:ring-2 focus:ring-[#2a6b8f] flex-1"
+              className="bg-white border border-black rounded-full px-4 py-2 text-sm text-black placeholder:text-black/50 focus:outline-none focus:ring-2 focus:ring-black flex-1"
             />
             <button
               type="submit"
@@ -316,7 +319,7 @@ function CartGiftCard({
               name="giftCardCode"
               placeholder="Gift card code"
               ref={giftCardCodeInput}
-              className="bg-white border border-[#2a6b8f] rounded-full px-4 h-10 text-sm text-black placeholder:text-black/50 focus:outline-none focus:ring-2 focus:ring-[#2a6b8f] flex-1"
+              className="bg-white border border-black rounded-full px-4 py-2 text-sm text-black placeholder:text-black/50 focus:outline-none focus:ring-2 focus:ring-black flex-1"
             />
             <button
               type="submit"

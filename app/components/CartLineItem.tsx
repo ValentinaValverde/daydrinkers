@@ -30,9 +30,9 @@ export function CartLineItem({
 
   if (layout === 'page') {
     return (
-      <li className="flex items-start gap-4 py-5 first:pt-0 last:pb-0">
+      <li className="flex items-start gap-8 py-5 first:pt-0 last:pb-0">
         {image && (
-          <div className="rounded-xl overflow-hidden shrink-0 w-24 h-24">
+          <div className="rounded-xl overflow-hidden shrink-0 w-32 h-32">
             <Image
               alt={title}
               aspectRatio="1/1"
@@ -99,11 +99,7 @@ export function CartLineItem({
           />
         )}
         <div>
-          <Link
-            prefetch="intent"
-            to={lineItemUrl}
-            onClick={() => close()}
-          >
+          <Link prefetch="intent" to={lineItemUrl} onClick={() => close()}>
             <p>
               <strong>{product.title}</strong>
             </p>
@@ -127,10 +123,7 @@ export function CartLineItem({
           <p id={childrenLabelId} className="sr-only">
             Line items with {product.title}
           </p>
-          <ul
-            aria-labelledby={childrenLabelId}
-            className="cart-line-children"
-          >
+          <ul aria-labelledby={childrenLabelId} className="cart-line-children">
             {lineItemChildren.map((childLine) => (
               <CartLineItem
                 childrenMap={childrenMap}

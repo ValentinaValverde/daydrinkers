@@ -44,7 +44,7 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
       <>
         <CartEmpty hidden={linesCount} layout="page" />
         {cartHasItems && (
-          <div className="flex flex-col md:flex-row md:justify-between gap-10 md:gap-16">
+          <div className="flex flex-col md:flex-row md:justify-between gap-32 md:gap-64">
             {/* Left: title + checkout summary */}
             <div className="md:sticky md:top-[100px] md:self-start flex flex-col gap-4">
               <h1 className="text-4xl font-bold text-black">Cart</h1>
