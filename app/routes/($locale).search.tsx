@@ -85,7 +85,7 @@ export default function SearchPage() {
               <a
                 key={filter}
                 href={`/search?q=${encodeURIComponent(filter)}`}
-                className="bg-[black] text-white border-2 border-[black] rounded-full px-8 py-2 flex items-center text-base font-medium hover:bg-transparent hover:text-[black] transition-colors cursor-pointer"
+                className="bg-[black] text-white border-2 border-[black] rounded-full px-8 py-2 flex items-center hover:bg-transparent hover:text-[black] transition-colors cursor-pointer"
               >
                 {filter}
               </a>
