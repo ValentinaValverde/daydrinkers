@@ -141,7 +141,7 @@ function CartEmpty({
         prefetch="viewport"
         className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center w-fit text-base hover:bg-transparent hover:text-black transition-colors"
       >
-        Continue shopping →
+        Continue shopping
       </Link>
     </div>
   );
