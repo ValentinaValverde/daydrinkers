@@ -1,3 +1,5 @@
+import PrimaryButton from '../ui/Button';
+
 const locations = [
   {
     name: 'Greenville Daydrinkers',
@@ -53,14 +55,11 @@ export default function LocationCardsSection() {
                 <p className="text-base text-black mt-1">{location.address}</p>
               </div>
               <p className="text-base text-black">{location.description}</p>
-              <a
-                href={location.link}
+              <PrimaryButton
+                text=" Get Directions"
+                link={location.link}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 h-[52px] flex items-center w-fit font-medium hover:bg-transparent hover:text-black transition-colors mt-2"
-              >
-                Get Directions →
-              </a>
+              />
             </div>
           </div>
         ))}
