@@ -24,7 +24,7 @@ export function PaginatedResourceSection<NodesType>({
 
         return (
           <div>
-            <PreviousLink className="mb-16 bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 h-[52px] flex flex-row items-center justify-center w-full mt-2 text-base group hover:bg-transparent hover:text-black transition-colors">
+            <PreviousLink className="mb-16 bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex flex-row items-center justify-center w-full mt-2 text-base group hover:bg-transparent hover:text-black transition-colors">
               {isLoading ? 'Loading...' : <span>Load previous</span>}
             </PreviousLink>
             {resourcesClassName ? (
@@ -38,7 +38,7 @@ export function PaginatedResourceSection<NodesType>({
             ) : (
               resourcesMarkup
             )}
-            <NextLink className="mt-16 bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 h-[52px] flex flex-row items-center justify-center w-full mt-2 text-base group hover:bg-transparent hover:text-black transition-colors">
+            <NextLink className="mt-16 bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex flex-row items-center justify-center w-full mt-2 text-base group hover:bg-transparent hover:text-black transition-colors">
               {isLoading ? 'Loading...' : <span>Load more</span>}
             </NextLink>
           </div>

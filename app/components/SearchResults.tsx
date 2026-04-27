@@ -204,7 +204,7 @@ function SearchResultsProducts({
               </div>
 
               <div className="flex justify-center mb-8">
-                <PreviousLink className="bg-transparent border-2 border-black text-black rounded-full px-8 h-[52px] flex items-center font-medium hover:bg-black hover:text-white transition-colors">
+                <PreviousLink className="bg-transparent border-2 border-black text-black rounded-full px-8 py-4 flex items-center font-medium hover:bg-black hover:text-white transition-colors">
                   {isLoading ? 'Loading...' : '↑ Load previous'}
                 </PreviousLink>
               </div>
@@ -254,7 +254,7 @@ function SearchResultsProducts({
               </div>
 
               <div className="flex justify-center mt-10">
-                <NextLink className="bg-[#3c6d8e] text-white border-2 border-[#3c6d8e] rounded-full px-8 h-[52px] flex items-center font-medium hover:bg-transparent hover:text-[#3c6d8e] transition-colors">
+                <NextLink className="bg-[#3c6d8e] text-white border-2 border-[#3c6d8e] rounded-full px-8 py-4 flex items-center font-medium hover:bg-transparent hover:text-[#3c6d8e] transition-colors">
                   {isLoading ? 'Loading...' : 'Load more ↓'}
                 </NextLink>
               </div>

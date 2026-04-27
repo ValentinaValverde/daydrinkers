@@ -21,8 +21,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
       <div className="flex flex-col gap-4">
         {cart?.cost?.subtotalAmount?.amount && (
           <p className="text-sm font-bold text-black">
-            Subtotal:{' '}
-            <Money data={cart.cost.subtotalAmount} />
+            Subtotal: <Money data={cart.cost.subtotalAmount} />
           </p>
         )}
         <CartDiscounts
@@ -44,10 +43,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
 
   // Aside layout
   return (
-    <div
-      aria-labelledby={summaryId}
-      className="cart-summary-aside"
-    >
+    <div aria-labelledby={summaryId} className="cart-summary-aside">
       <h4 id={summaryId}>Totals</h4>
       <dl role="group" className="cart-subtotal">
         <dt>Subtotal</dt>
@@ -90,7 +86,7 @@ function CartCheckoutActions({
       <a
         href={checkoutUrl}
         target="_self"
-        className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 h-[52px] flex items-center w-fit text-base hover:bg-transparent hover:text-black transition-colors"
+        className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center w-fit text-base hover:bg-transparent hover:text-black transition-colors"
       >
         Checkout →
       </a>

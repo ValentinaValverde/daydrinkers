@@ -56,7 +56,10 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
 
             {/* Right: items card */}
             <div className="bg-[#FDFFF8] rounded-[24px] p-8 border-2 border-black md:min-w-[600px] flex-1">
-              <ul aria-label="Cart line items" className="divide-y divide-black/10">
+              <ul
+                aria-label="Cart line items"
+                className="divide-y divide-black/10"
+              >
                 {(cart?.lines?.nodes ?? []).map((line) => {
                   if (
                     'parentRelationship' in line &&
@@ -87,10 +90,7 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
   const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
 
   return (
-    <section
-      className={className}
-      aria-label="Cart drawer"
-    >
+    <section className={className} aria-label="Cart drawer">
       <CartEmpty hidden={linesCount} layout="aside" />
       <div className="cart-details">
         <p id="cart-lines" className="sr-only">
@@ -139,7 +139,7 @@ function CartEmpty({
         to="/collections/all"
         onClick={close}
         prefetch="viewport"
-        className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 h-[52px] flex items-center w-fit text-base hover:bg-transparent hover:text-black transition-colors"
+        className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center w-fit text-base hover:bg-transparent hover:text-black transition-colors"
       >
         Continue shopping →
       </Link>

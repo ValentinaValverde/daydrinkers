@@ -128,7 +128,7 @@ export default function ContactSection() {
               />
               <button
                 type="submit"
-                className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 h-[52px] flex items-center text-base w-fit mt-2 hover:bg-transparent hover:text-black transition-colors"
+                className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center text-base w-fit mt-2 hover:bg-transparent hover:text-black transition-colors"
               >
                 Submit
               </button>
