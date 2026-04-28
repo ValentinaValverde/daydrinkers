@@ -149,25 +149,18 @@ function ProductGallery({
           </button>
         )}
 
-        {/* Thumbnails */}
+        {/* Remaining images */}
         {displayImages.length > 1 && (
           <div className="grid grid-cols-2 gap-4">
-            {displayImages.slice(0, 2).map((img, i) => (
+            {displayImages.slice(1).map((img, i) => (
               <button
                 key={img.id ?? i}
-                onClick={() => {
-                  setSelected(i);
-                  openLightbox(i);
-                }}
-                className={`rounded-[32px] overflow-hidden border-2 transition-colors duration-300 cursor-zoom-in ${
-                  selected === i
-                    ? 'border-black'
-                    : 'border-transparent hover:border-black'
-                }`}
+                onClick={() => openLightbox(i + 1)}
+                className="rounded-[32px] overflow-hidden border-2 border-transparent hover:border-black transition-colors duration-300 cursor-zoom-in"
               >
                 <Image
                   data={img as any}
-                  alt={img.altText || `${title} view ${i + 1}`}
+                  alt={img.altText || `${title} view ${i + 2}`}
                   aspectRatio="3/4"
                   sizes="(min-width: 45em) 25vw, 50vw"
                   className="w-full object-cover"
