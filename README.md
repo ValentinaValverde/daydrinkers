@@ -1,37 +1,45 @@
-# Hydrogen template: Skeleton
+# Hello Daydrinkers
 
-Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dovetail with [Remix](https://remix.run/), Shopify’s full stack web framework. This template contains a **minimal setup** of components, queries and tooling to get started with Hydrogen.
+Storefront for Daydrinkers, a cute coffee shop with good drinks and even better vibes. Built with Shopify Hydrogen and deployed on Oxygen.
 
-[Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
-[Get familiar with Remix](https://remix.run/docs/en/v1)
+## Tech stack
 
-## What's included
+- [Hydrogen](https://shopify.dev/custom-storefronts/hydrogen) — Shopify's headless commerce framework
+- [React Router 7](https://reactrouter.com/) — routing and server-side rendering
+- [Tailwind CSS v4](https://tailwindcss.com/) — styling
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/) — dev server and bundler
+- Deployed on [Shopify Oxygen](https://shopify.dev/custom-storefronts/oxygen)
 
-- Remix
-- Hydrogen
-- Oxygen
-- Vite
-- Shopify CLI
-- ESLint
-- Prettier
-- GraphQL generator
-- TypeScript and JavaScript flavors
-- Minimal setup of components and routes
+## Pages
+
+| Route | Description |
+|---|---|
+| `/` | Home — hero, menu preview, shop collections, locations, our story, contact |
+| `/menu` | Full drink and food menu |
+| `/locations` | Store locations |
+| `/collections/:handle` | Collection pages |
+| `/products/:handle` | Product detail page |
+| `/cart` | Cart with recommended products |
+| `/search` | Dynamic predictive search |
+| `/account` | Customer account (login, orders, profile) |
 
 ## Getting started
 
-**Requirements:**
+**Requirements:** Node.js 22 or 24
 
-- Node.js version 18.0.0 or higher
+Install dependencies:
 
 ```bash
-npm create @shopify/hydrogen@latest
+npm install
 ```
 
-## Building for production
+You'll need a `.env` file with your Shopify storefront credentials. Ask a teammate or pull from the Shopify dashboard:
 
-```bash
-npm run build
+```
+SESSION_SECRET=
+PUBLIC_STOREFRONT_API_TOKEN=
+PUBLIC_STORE_DOMAIN=
 ```
 
 ## Local development
@@ -40,6 +48,21 @@ npm run build
 npm run dev
 ```
 
-## Setup for using Customer Account API (`/account` section)
+## Build & preview
 
-Follow step 1 and 2 of <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
+```bash
+npm run build
+npm run preview
+```
+
+## Other commands
+
+```bash
+npm run lint        # ESLint
+npm run typecheck   # TypeScript check
+npm run codegen     # Regenerate Shopify Storefront API types
+```
+
+## Deployment
+
+This project deploys automatically to Shopify Oxygen via the GitHub Actions workflow in `.github/workflows/`. Pushes to `main` trigger a production deploy.
