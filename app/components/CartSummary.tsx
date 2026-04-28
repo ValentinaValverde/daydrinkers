@@ -19,7 +19,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
   if (layout === 'page') {
     return (
       <div className="flex flex-col gap-8">
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <CartDiscounts
             discountCodes={cart?.discountCodes}
             discountsHeadingId={discountsHeadingId}
@@ -32,7 +32,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
             giftCardInputId={giftCardInputId}
             layout="page"
           />
-        </div>
+        </div> */}
 
         {cart?.cost?.subtotalAmount?.amount && (
           <span className="">
