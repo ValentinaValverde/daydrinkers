@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {Link, useNavigate} from 'react-router';
 import {type MappedProductOptions, ShopPayButton} from '@shopify/hydrogen';
 import type {
@@ -7,7 +7,6 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import {MinusIcon, PlusIcon} from '@phosphor-icons/react';
 import {AddToCartButton} from './AddToCartButton';
-import {useAside} from './Aside';
 import type {ProductFragment} from 'storefrontapi.generated';
 
 export function ProductForm({
@@ -20,12 +19,19 @@ export function ProductForm({
   storeDomain: string;
 }) {
   const navigate = useNavigate();
-  const {open} = useAside();
   const [quantity, setQuantity] = useState(1);
+  const [toastVisible, setToastVisible] = useState(false);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     setQuantity(1);
   }, [selectedVariant?.id]);
+
+  const showToast = () => {
+    setToastVisible(true);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToastVisible(false), 3000);
+  };
 
   const available = selectedVariant?.availableForSale ?? false;
 
@@ -138,7 +144,7 @@ export function ProductForm({
 
       <AddToCartButton
         disabled={!selectedVariant || !available}
-        onClick={() => open('cart')}
+        onClick={showToast}
         lines={
           selectedVariant
             ? [
@@ -169,6 +175,14 @@ export function ProductForm({
       >
         More payment options
       </Link>
+
+      <div
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-[#f0f2ea] text-sm px-5 py-3 rounded-full shadow-lg transition-all duration-300 pointer-events-none z-50 ${
+          toastVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        }`}
+      >
+        Added to cart!
+      </div>
     </div>
   );
 }
