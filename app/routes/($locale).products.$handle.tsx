@@ -1,5 +1,6 @@
-import {redirect, useLoaderData} from 'react-router';
+import {redirect, useLoaderData, Await} from 'react-router';
 import type {Route} from './+types/products.$handle';
+import {useState, useCallback, useEffect, Suspense} from 'react';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -7,119 +8,331 @@ import {
   getProductOptions,
   getAdjacentAndFirstAvailableVariants,
   useSelectedOptionInUrlParam,
+  Image,
 } from '@shopify/hydrogen';
+import {XIcon, ArrowLeftIcon, ArrowRightIcon} from '@phosphor-icons/react';
 import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import {ProductItem} from '~/components/ProductItem';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import type * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
+import type {ProductFragment} from 'storefrontapi.generated';
 
-export const meta: Route.MetaFunction = ({data}) => {
+type RecommendedProduct = {
+  id: string;
+  title: string;
+  handle: string;
+  priceRange: {
+    minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+  };
+  featuredImage: {
+    id?: string | null;
+    url: string;
+    altText?: string | null;
+    width?: number | null;
+    height?: number | null;
+  } | null;
+};
+
+type ProductRecommendationsQuery = {
+  productRecommendations: RecommendedProduct[] | null;
+};
+
+export const meta: Route.MetaFunction = ({
+  data,
+}: {
+  data?: {product: {title: string; handle: string}};
+}) => {
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
+    {title: `Daydrinkers | ${data?.product.title ?? ''}`},
+    {rel: 'canonical', href: `/products/${data?.product.handle}`},
   ];
 };
 
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
+  const deferredData = loadDeferredData(args, criticalData.product.id);
   return {...deferredData, ...criticalData};
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
 async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
   const {handle} = params;
-  const {storefront} = context;
+  const {storefront, env} = context;
 
-  if (!handle) {
-    throw new Error('Expected product handle to be defined');
-  }
+  if (!handle) throw new Error('Expected product handle to be defined');
 
   const [{product}] = await Promise.all([
     storefront.query(PRODUCT_QUERY, {
       variables: {handle, selectedOptions: getSelectedProductOptions(request)},
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
 
-  if (!product?.id) {
-    throw new Response(null, {status: 404});
-  }
+  if (!product?.id) throw new Response(null, {status: 404});
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, {handle, data: product});
 
-  return {
-    product,
+  return {product, storeDomain: env.PUBLIC_STORE_DOMAIN};
+}
+
+function loadDeferredData({context}: Route.LoaderArgs, productId: string) {
+  const recommendations = context.storefront
+    .query(RECOMMENDATIONS_QUERY, {variables: {productId}})
+    .catch(() => null);
+
+  return {recommendations};
+}
+
+// ─── Image Gallery ───────────────────────────────────────────────────────────
+
+type GalleryImage = {
+  id?: string | null;
+  url: string;
+  altText?: string | null;
+  width?: number | null;
+  height?: number | null;
+};
+
+function ProductGallery({
+  images,
+  title,
+}: {
+  images: GalleryImage[];
+  title: string;
+}) {
+  const [selected, setSelected] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIdx, setLightboxIdx] = useState(0);
+
+  const openLightbox = (i: number) => {
+    setLightboxIdx(i);
+    setLightboxOpen(true);
   };
+
+  const prev = useCallback(
+    () => setLightboxIdx((i) => (i - 1 + images.length) % images.length),
+    [images.length],
+  );
+  const next = useCallback(
+    () => setLightboxIdx((i) => (i + 1) % images.length),
+    [images.length],
+  );
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxOpen(false);
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightboxOpen, prev, next]);
+
+  const displayImages = images.length > 0 ? images : [];
+
+  return (
+    <>
+      <div className="w-full md:w-1/2 flex flex-col gap-4">
+        {/* Main image */}
+        {displayImages[selected] && (
+          <button
+            onClick={() => openLightbox(selected)}
+            className="rounded-[32px] overflow-hidden border-2 border-transparent hover:border-black transition-colors duration-300 cursor-zoom-in text-left w-full"
+          >
+            <Image
+              data={displayImages[selected] as any}
+              alt={displayImages[selected].altText || title}
+              aspectRatio="4/5"
+              sizes="(min-width: 45em) 50vw, 100vw"
+              className="w-full object-cover"
+            />
+          </button>
+        )}
+
+        {/* Remaining images */}
+        {displayImages.length > 1 && (
+          <div className="grid grid-cols-2 gap-4">
+            {displayImages.slice(1).map((img, i) => (
+              <button
+                key={img.id ?? i}
+                onClick={() => openLightbox(i + 1)}
+                className="rounded-[32px] overflow-hidden border-2 border-transparent hover:border-black transition-colors duration-300 cursor-zoom-in"
+              >
+                <Image
+                  data={img as any}
+                  alt={img.altText || `${title} view ${i + 2}`}
+                  aspectRatio="3/4"
+                  sizes="(min-width: 45em) 25vw, 50vw"
+                  className="w-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && displayImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-6 right-6 text-white hover:opacity-60 transition-opacity"
+            aria-label="Close"
+          >
+            <XIcon size={32} />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              prev();
+            }}
+            className="absolute left-6 text-white hover:opacity-60 transition-opacity"
+            aria-label="Previous image"
+          >
+            <ArrowLeftIcon size={32} />
+          </button>
+          <img
+            src={displayImages[lightboxIdx]?.url}
+            alt={displayImages[lightboxIdx]?.altText || title}
+            className="max-h-[80vh] max-w-[80vw] rounded-[32px] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              next();
+            }}
+            className="absolute right-6 text-white hover:opacity-60 transition-opacity"
+            aria-label="Next image"
+          >
+            <ArrowRightIcon size={32} />
+          </button>
+          <div className="absolute bottom-6 flex gap-2">
+            {displayImages.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIdx(i);
+                }}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === lightboxIdx ? 'bg-white' : 'bg-white/40'
+                }`}
+                aria-label={`Go to image ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
-function loadDeferredData({context, params}: Route.LoaderArgs) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
+// ─── Related Products ─────────────────────────────────────────────────────────
 
-  return {};
+function RelatedProducts({
+  recommendations,
+}: {
+  recommendations: Promise<ProductRecommendationsQuery | null>;
+}) {
+  return (
+    <Suspense fallback={null}>
+      <Await resolve={recommendations}>
+        {(data) => {
+          const products = data?.productRecommendations?.slice(0, 6);
+          if (!products?.length) return null;
+          return (
+            <section className="bg-[#f0f2ea] py-16 md:py-24">
+              <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+                <div className="mb-10">
+                  <h2 className="text-3xl font-bold text-black">
+                    There&apos;s more where that came from...
+                  </h2>
+                  <p className="text-base text-black mt-2">
+                    You might also like these.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {products.map((product: RecommendedProduct, i: number) => (
+                    <ProductItem
+                      key={product.id}
+                      product={product}
+                      loading={i < 3 ? 'eager' : undefined}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        }}
+      </Await>
+    </Suspense>
+  );
 }
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Product() {
-  const {product} = useLoaderData<typeof loader>();
+  const {product, recommendations, storeDomain} =
+    useLoaderData<typeof loader>();
 
-  // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
     getAdjacentAndFirstAvailableVariants(product),
   );
 
-  // Sets the search param to the selected variant without navigation
-  // only when no search params are set in the url
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
 
-  // Get the product options array
   const productOptions = getProductOptions({
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const {title, descriptionHtml} = product;
+  // Merge variant image at the front of the gallery
+  const allImages: GalleryImage[] = [];
+  if (selectedVariant?.image) allImages.push(selectedVariant.image);
+  for (const img of product.images.nodes) {
+    if (!allImages.find((i) => i.id === img.id)) allImages.push(img);
+  }
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
-      </div>
+    <div className="min-h-screen bg-[#f0f2ea]">
+      <section className="pt-[100px] pb-16 md:pb-24">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+          <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-start">
+            {/* Left: gallery */}
+            <ProductGallery images={allImages} title={product.title} />
+
+            {/* Right: details */}
+            <div className="w-full md:w-1/2 flex flex-col gap-6 md:pt-4 md:sticky md:top-[100px] md:self-start">
+              <h1 className="text-4xl md:text-[48px] font-bold leading-tight text-black">
+                {product.title}
+              </h1>
+              <ProductPrice
+                price={selectedVariant?.price}
+                compareAtPrice={selectedVariant?.compareAtPrice}
+              />
+              {product.descriptionHtml && (
+                <div
+                  className="text-base leading-relaxed text-black [&_em]:font-sans [&_em]:text-lg [&_i]:font-sans [&_i]:text-lg"
+                  dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
+                />
+              )}
+              <ProductForm
+                productOptions={productOptions}
+                selectedVariant={selectedVariant}
+                storeDomain={storeDomain}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <RelatedProducts recommendations={recommendations} />
+
       <Analytics.ProductView
         data={{
           products: [
@@ -138,6 +351,8 @@ export default function Product() {
     </div>
   );
 }
+
+// ─── GraphQL ──────────────────────────────────────────────────────────────────
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariant on ProductVariant {
@@ -186,6 +401,15 @@ const PRODUCT_FRAGMENT = `#graphql
     description
     encodedVariantExistence
     encodedVariantAvailability
+    images(first: 10) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     options {
       name
       optionValues {
@@ -206,7 +430,7 @@ const PRODUCT_FRAGMENT = `#graphql
     selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {
       ...ProductVariant
     }
-    adjacentVariants (selectedOptions: $selectedOptions) {
+    adjacentVariants(selectedOptions: $selectedOptions) {
       ...ProductVariant
     }
     seo {
@@ -229,4 +453,30 @@ const PRODUCT_QUERY = `#graphql
     }
   }
   ${PRODUCT_FRAGMENT}
+` as const;
+
+const RECOMMENDATIONS_QUERY = `#graphql
+  fragment RecommendedProduct on Product {
+    id
+    title
+    handle
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    featuredImage {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+  query ProductRecommendations($productId: ID!) {
+    productRecommendations(productId: $productId) {
+      ...RecommendedProduct
+    }
+  }
 ` as const;

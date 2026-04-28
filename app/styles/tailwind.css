@@ -4,3 +4,13 @@
  */
 
 @import 'tailwindcss';
+
+@theme inline {
+  --color-background: #f0f2ea;
+  --color-foreground: #1a1a1a;
+  --color-brand-blue: #2a6b8f;
+  --color-brand-blue-mid: #3c6d8e;
+  --color-brand-tan: #e4ceb4;
+  --font-sans: 'Poppins', sans-serif;
+  --font-heading: 'Schoolbell', cursive;
+}

@@ -17,6 +17,7 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
+import PrimaryButton from './components/ui/Button';
 
 export type RootLoader = typeof loader;
 
@@ -150,6 +151,16 @@ export function Layout({children}: {children?: React.ReactNode}) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Schoolbell:wght@400&display=swap"
+          rel="stylesheet"
+        />
         <link rel="stylesheet" href={tailwindCss}></link>
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
@@ -197,15 +208,14 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
 
+  console.log(errorMessage);
+
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
+    <div className="route-error w-full min-h-screen flex flex-col justify-center items-center gap-4">
+      <h1 className="text-4xl">Sorry about that!</h1>
+      <p>Error: {errorStatus}</p>
+
+      <PrimaryButton text="Go home" link="/" />
     </div>
   );
 }

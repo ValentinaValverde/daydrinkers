@@ -1,4 +1,4 @@
-import {useLoaderData} from 'react-router';
+import {useLoaderData, redirect} from 'react-router';
 import type {Route} from './+types/pages.$handle';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
@@ -23,6 +23,10 @@ export async function loader(args: Route.LoaderArgs) {
 async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
   if (!params.handle) {
     throw new Error('Missing page handle');
+  }
+
+  if (['contact', 'who-we-are'].includes(params.handle)) {
+    throw redirect('/');
   }
 
   const [{page}] = await Promise.all([

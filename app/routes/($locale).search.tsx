@@ -1,4 +1,5 @@
-import {useLoaderData} from 'react-router';
+import {useState, useRef} from 'react';
+import {useLoaderData, useSubmit} from 'react-router';
 import type {Route} from './+types/search';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
@@ -14,7 +15,7 @@ import type {
 } from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [{title: `Daydrinkers | Search`}];
 };
 
 export async function loader({request, context}: Route.LoaderArgs) {
@@ -33,45 +34,85 @@ export async function loader({request, context}: Route.LoaderArgs) {
   return await searchPromise;
 }
 
+const QUICK_FILTERS = ['Tee', 'Socks', 'Coffee'];
+
 /**
  * Renders the /search route
  */
 export default function SearchPage() {
   const {type, term, result, error} = useLoaderData<typeof loader>();
+  const submit = useSubmit();
+  const debounceTimer = useRef<ReturnType<typeof setTimeout>>();
+  const [inputValue, setInputValue] = useState(term);
+
   if (type === 'predictive') return null;
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
+      submit({q: value}, {method: 'get', action: '/search'});
+    }, 300);
+  };
+
   return (
-    <div className="search">
-      <h1>Search</h1>
-      <SearchForm>
-        {({inputRef}) => (
-          <>
-            <input
-              defaultValue={term}
-              name="q"
-              placeholder="Search…"
-              ref={inputRef}
-              type="search"
-            />
-            &nbsp;
-            <button type="submit">Search</button>
-          </>
-        )}
-      </SearchForm>
-      {error && <p style={{color: 'red'}}>{error}</p>}
-      {!term || !result?.total ? (
-        <SearchResults.Empty />
-      ) : (
-        <SearchResults result={result} term={term}>
-          {({articles, pages, products, term}) => (
-            <div>
-              <SearchResults.Products products={products} term={term} />
-              <SearchResults.Pages pages={pages} term={term} />
-              <SearchResults.Articles articles={articles} term={term} />
-            </div>
+    <div className="min-h-screen bg-[#f0f2ea]">
+      {/* Hero */}
+      <section className="relative w-full pt-[100px] pb-16 md:pb-20 overflow-hidden">
+        <div className="flex flex-col items-center justify-center gap-4 px-6 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-black">Search</h1>
+          <p className="max-w-[452px] text-black opacity-80">
+            Looking for something specific? Search our full catalog of products.
+          </p>
+
+          <SearchForm className="w-full md:w-[45%] mt-6">
+            {({inputRef}) => (
+              <input
+                value={inputValue}
+                onChange={handleChange}
+                name="q"
+                placeholder="Search products..."
+                ref={inputRef}
+                type="search"
+                className="w-full bg-[#FDFFF8] rounded-full py-4 px-8 border-2 border-black text-black placeholder:text-black/50 focus:outline-none"
+              />
+            )}
+          </SearchForm>
+
+          <div className="flex flex-wrap justify-center items-center gap-3 mt-2">
+            {QUICK_FILTERS.map((filter) => (
+              <a
+                key={filter}
+                href={`/search?q=${encodeURIComponent(filter)}`}
+                className="bg-[black] text-white border-2 border-[black] rounded-full px-8 py-2 flex items-center hover:bg-transparent hover:text-[black] transition-colors cursor-pointer"
+              >
+                {filter}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Results */}
+      <section className="py-16 md:py-24">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+          {error && <p className="text-red-600 mb-6">{error}</p>}
+          {!term || !result?.total ? (
+            <SearchResults.Empty />
+          ) : (
+            <SearchResults result={result} term={term}>
+              {({articles, products, term}) => (
+                <div className="space-y-16">
+                  <SearchResults.Products products={products} term={term} />
+                  <SearchResults.Articles articles={articles} term={term} />
+                </div>
+              )}
+            </SearchResults>
           )}
-        </SearchResults>
-      )}
+        </div>
+      </section>
+
       <Analytics.SearchView data={{searchTerm: term, searchResults: result}} />
     </div>
   );
@@ -122,16 +163,6 @@ const SEARCH_PRODUCT_FRAGMENT = `#graphql
   }
 ` as const;
 
-const SEARCH_PAGE_FRAGMENT = `#graphql
-  fragment SearchPage on Page {
-     __typename
-     handle
-    id
-    title
-    trackingParameters
-  }
-` as const;
-
 const SEARCH_ARTICLE_FRAGMENT = `#graphql
   fragment SearchArticle on Article {
     __typename
@@ -173,17 +204,6 @@ export const SEARCH_QUERY = `#graphql
         }
       }
     }
-    pages: search(
-      query: $term,
-      types: [PAGE],
-      first: $first,
-    ) {
-      nodes {
-        ...on Page {
-          ...SearchPage
-        }
-      }
-    }
     products: search(
       after: $endCursor,
       before: $startCursor,
@@ -205,7 +225,6 @@ export const SEARCH_QUERY = `#graphql
     }
   }
   ${SEARCH_PRODUCT_FRAGMENT}
-  ${SEARCH_PAGE_FRAGMENT}
   ${SEARCH_ARTICLE_FRAGMENT}
   ${PAGE_INFO_FRAGMENT}
 ` as const;

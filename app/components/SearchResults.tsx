@@ -1,6 +1,9 @@
+import {useState} from 'react';
 import {Link} from 'react-router';
+import {FilterDropdown} from '~/components/ui/FilterDropdown';
 import {Image, Money, Pagination} from '@shopify/hydrogen';
 import {urlWithTrackingParams, type RegularSearchReturn} from '~/lib/search';
+import {ProductItem} from '~/components/ProductItem';
 
 type SearchItems = RegularSearchReturn['result']['items'];
 type PartialSearchResult<ItemType extends keyof SearchItems> = Pick<
@@ -39,9 +42,9 @@ function SearchResultsArticles({
   }
 
   return (
-    <div className="search-result">
-      <h2>Articles</h2>
-      <div>
+    <div>
+      <h2 className="text-3xl font-bold text-black mb-6">Articles</h2>
+      <div className="space-y-3">
         {articles?.nodes?.map((article) => {
           const articleUrl = urlWithTrackingParams({
             baseUrl: `/blogs/${article.handle}`,
@@ -50,15 +53,17 @@ function SearchResultsArticles({
           });
 
           return (
-            <div className="search-results-item" key={article.id}>
-              <Link prefetch="intent" to={articleUrl}>
-                {article.title}
-              </Link>
-            </div>
+            <Link
+              key={article.id}
+              prefetch="intent"
+              to={articleUrl}
+              className="block text-black hover:opacity-60 transition-opacity font-medium"
+            >
+              {article.title}
+            </Link>
           );
         })}
       </div>
-      <br />
     </div>
   );
 }
@@ -69,9 +74,9 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
   }
 
   return (
-    <div className="search-result">
-      <h2>Pages</h2>
-      <div>
+    <div>
+      <h2 className="text-3xl font-bold text-black mb-6">Pages</h2>
+      <div className="space-y-3">
         {pages?.nodes?.map((page) => {
           const pageUrl = urlWithTrackingParams({
             baseUrl: `/pages/${page.handle}`,
@@ -80,82 +85,193 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
           });
 
           return (
-            <div className="search-results-item" key={page.id}>
-              <Link prefetch="intent" to={pageUrl}>
-                {page.title}
-              </Link>
-            </div>
+            <Link
+              key={page.id}
+              prefetch="intent"
+              to={pageUrl}
+              className="block text-black hover:opacity-60 transition-opacity font-medium"
+            >
+              {page.title}
+            </Link>
           );
         })}
       </div>
-      <br />
     </div>
   );
 }
+
+const SORT_OPTIONS = [
+  {label: 'Relevance', value: 'relevance'},
+  {label: 'A to Z', value: 'title-asc'},
+  {label: 'Price: Low to high', value: 'price-asc'},
+  {label: 'Price: High to low', value: 'price-desc'},
+];
+
+const PRICE_FILTERS = [
+  {label: 'All prices', value: 'all'},
+  {label: 'Under $50', value: 'under-50'},
+  {label: '$50 - $100', value: '50-100'},
+  {label: 'Over $100', value: 'over-100'},
+];
+
+const AVAILABILITY_OPTIONS = [
+  {label: 'All', value: 'all'},
+  {label: 'In stock', value: 'in-stock'},
+  {label: 'Out of stock', value: 'out-of-stock'},
+];
 
 function SearchResultsProducts({
   term,
   products,
 }: PartialSearchResult<'products'>) {
+  const [sortBy, setSortBy] = useState('relevance');
+  const [priceFilter, setPriceFilter] = useState('all');
+  const [availability, setAvailability] = useState('all');
+
   if (!products?.nodes.length) {
     return null;
   }
 
   return (
-    <div className="search-result">
-      <h2>Products</h2>
+    <div>
+      <h2 className="text-3xl font-bold text-black mb-8">Products</h2>
       <Pagination connection={products}>
         {({nodes, isLoading, NextLink, PreviousLink}) => {
-          const ItemsMarkup = nodes.map((product) => {
-            const productUrl = urlWithTrackingParams({
-              baseUrl: `/products/${product.handle}`,
-              trackingParams: product.trackingParameters,
-              term,
-            });
+          let sorted = [...nodes];
 
-            const price = product?.selectedOrFirstAvailableVariant?.price;
-            const image = product?.selectedOrFirstAvailableVariant?.image;
-
-            return (
-              <div className="search-results-item" key={product.id}>
-                <Link prefetch="intent" to={productUrl}>
-                  {image && (
-                    <Image data={image} alt={product.title} width={50} />
-                  )}
-                  <div>
-                    <p>{product.title}</p>
-                    <small>{price && <Money data={price} />}</small>
-                  </div>
-                </Link>
-              </div>
+          if (sortBy === 'price-asc')
+            sorted.sort(
+              (a, b) =>
+                parseFloat(
+                  a.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ) -
+                parseFloat(
+                  b.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ),
             );
-          });
+          else if (sortBy === 'price-desc')
+            sorted.sort(
+              (a, b) =>
+                parseFloat(
+                  b.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ) -
+                parseFloat(
+                  a.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+                ),
+            );
+          else if (sortBy === 'title-asc')
+            sorted.sort((a, b) => a.title.localeCompare(b.title));
+
+          if (priceFilter !== 'all') {
+            sorted = sorted.filter((product) => {
+              const price = parseFloat(
+                product.selectedOrFirstAvailableVariant?.price?.amount ?? '0',
+              );
+              if (priceFilter === 'under-50') return price < 50;
+              if (priceFilter === '50-100') return price >= 50 && price <= 100;
+              return price > 100;
+            });
+          }
+
+          if (availability !== 'all') {
+            sorted = sorted.filter((product) => {
+              const inStock = product.selectedOrFirstAvailableVariant != null;
+              return availability === 'in-stock' ? inStock : !inStock;
+            });
+          }
 
           return (
             <div>
-              <div>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+              <div className="flex flex-wrap gap-8 mb-8">
+                <FilterDropdown
+                  label="Availability"
+                  value={availability}
+                  options={AVAILABILITY_OPTIONS}
+                  onChange={setAvailability}
+                />
+                <FilterDropdown
+                  label="Price"
+                  value={priceFilter}
+                  options={PRICE_FILTERS}
+                  onChange={setPriceFilter}
+                />
+                <FilterDropdown
+                  label="Sort by"
+                  value={sortBy}
+                  options={SORT_OPTIONS}
+                  onChange={setSortBy}
+                />
+              </div>
+
+              <div className="flex justify-center mb-8">
+                <PreviousLink className="bg-transparent border-2 border-black text-black rounded-full px-8 py-4 flex items-center font-medium hover:bg-black hover:text-white transition-colors">
+                  {isLoading ? 'Loading...' : '↑ Load previous'}
                 </PreviousLink>
               </div>
-              <div>
-                {ItemsMarkup}
-                <br />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {sorted.map((product, i) => {
+                  const price = product?.selectedOrFirstAvailableVariant?.price;
+                  const image = product?.selectedOrFirstAvailableVariant?.image;
+                  const productUrl = urlWithTrackingParams({
+                    baseUrl: `/products/${product.handle}`,
+                    trackingParams: product.trackingParameters,
+                    term,
+                  });
+
+                  return (
+                    <Link
+                      key={product.id}
+                      prefetch="intent"
+                      to={productUrl}
+                      className="space-y-3 block group"
+                    >
+                      <div className="rounded-[32px] overflow-hidden border-2 border-transparent group-hover:border-black transition-colors duration-300 bg-[#e4ceb4]">
+                        {image ? (
+                          <Image
+                            data={image}
+                            alt={product.title}
+                            aspectRatio="3/4"
+                            loading={i < 6 ? 'eager' : 'lazy'}
+                            sizes="(min-width: 45em) 400px, 100vw"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full aspect-[3/4] bg-[#e4ceb4]" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-lg text-black">
+                          {product.title}
+                        </p>
+                        <p className="text-sm text-black">
+                          {price && <Money data={price} />}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
-              <div>
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+
+              <div className="flex justify-center mt-10">
+                <NextLink className="bg-[#3c6d8e] text-white border-2 border-[#3c6d8e] rounded-full px-8 py-4 flex items-center font-medium hover:bg-transparent hover:text-[#3c6d8e] transition-colors">
+                  {isLoading ? 'Loading...' : 'Load more ↓'}
                 </NextLink>
               </div>
             </div>
           );
         }}
       </Pagination>
-      <br />
     </div>
   );
 }
 
 function SearchResultsEmpty() {
-  return <p>No results, try a different search.</p>;
+  return (
+    <div className="text-center py-20">
+      <p className="text-xl text-black/60">
+        No results found. Try a different search term.
+      </p>
+    </div>
+  );
 }
