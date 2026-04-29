@@ -5,7 +5,7 @@ export default function SpotifySection() {
   const {playing, setPlaying} = useSpotify();
 
   return (
-    <section className="bg-[#f0f2ea] py-16 md:py-20 px-6 md:px-16">
+    <section className="bg-[#e4ceb4] py-16 md:py-20 px-6 md:px-16">
       <div className="max-w-screen-xl mx-auto flex flex-col items-center text-center gap-6">
         <SpotifyLogo size={40} weight="fill" className="text-black" />
         <h2 className="text-3xl md:text-5xl font-semibold text-black">
