@@ -15,9 +15,9 @@ export default function MenuPage() {
     <div className="min-h-screen bg-[#f0f2ea]">
       <MenuHeroSection />
       <MenuPastriesSection />
-      <MenuDrinksSection />
       <MenuGrabAndGoSection />
-      <MenuSyrupsSection />
+      <MenuDrinksSection />
+      {/* <MenuSyrupsSection /> */}
       <MenuCollageSection />
     </div>
   );
