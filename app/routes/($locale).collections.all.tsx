@@ -100,19 +100,6 @@ const SORT_OPTIONS = [
   {label: 'Newest', value: 'newest'},
 ];
 
-const AVAILABILITY_OPTIONS = [
-  {label: 'All', value: 'all'},
-  {label: 'In stock', value: 'in-stock'},
-  {label: 'Out of stock', value: 'out-of-stock'},
-];
-
-const PRICE_OPTIONS = [
-  {label: 'All prices', value: 'all'},
-  {label: 'Under $50', value: 'under-50'},
-  {label: '$50–$100', value: '50-100'},
-  {label: 'Over $100', value: 'over-100'},
-];
-
 function buildFilterUrl(
   params: URLSearchParams,
   key: string,
@@ -125,7 +112,8 @@ function buildFilterUrl(
   return `?${next.toString()}`;
 }
 
-const pillBase = 'rounded-full px-6 py-2 border-2 border-black flex items-center transition-colors text-sm';
+const pillBase =
+  'rounded-full px-6 py-2 border-2 border-black flex items-center transition-colors text-sm';
 const pillActive = `${pillBase} bg-black text-white`;
 const pillInactive = `${pillBase} bg-transparent text-black hover:bg-black hover:text-white`;
 
@@ -149,34 +137,8 @@ export default function Collection() {
                 <a
                   key={opt.value}
                   href={buildFilterUrl(searchParams, 'sort', opt.value)}
-                  className={currentSort === opt.value ? pillActive : pillInactive}
-                >
-                  {opt.label}
-                </a>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-semibold text-sm">Availability:</span>
-              {AVAILABILITY_OPTIONS.map((opt) => (
-                <a
-                  key={opt.value}
-                  href={buildFilterUrl(searchParams, 'availability', opt.value)}
                   className={
-                    currentAvailability === opt.value ? pillActive : pillInactive
-                  }
-                >
-                  {opt.label}
-                </a>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-semibold text-sm">Price:</span>
-              {PRICE_OPTIONS.map((opt) => (
-                <a
-                  key={opt.value}
-                  href={buildFilterUrl(searchParams, 'price', opt.value)}
-                  className={
-                    currentPrice === opt.value ? pillActive : pillInactive
+                    currentSort === opt.value ? pillActive : pillInactive
                   }
                 >
                   {opt.label}
