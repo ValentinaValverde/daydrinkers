@@ -65,6 +65,7 @@ const HOME_PRODUCTS_QUERY = `#graphql
     id
     handle
     title
+    availableForSale
     featuredImage {
       id
       altText

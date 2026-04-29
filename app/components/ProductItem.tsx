@@ -11,6 +11,7 @@ type RecommendedProduct = {
   id: string;
   title: string;
   handle: string;
+  availableForSale?: boolean | null;
   priceRange: {
     minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
   };
@@ -35,6 +36,7 @@ export function ProductItem({
 }) {
   const variantUrl = useVariantUrl(product.handle);
   const image = product.featuredImage;
+  const soldOut = product.availableForSale === false;
 
   return (
     <Link
@@ -42,7 +44,7 @@ export function ProductItem({
       prefetch="intent"
       className="space-y-3 block group"
     >
-      <div className="rounded-[32px] overflow-hidden border-2 border-transparent group-hover:border-black transition-colors duration-300 bg-[#e4ceb4]">
+      <div className="relative rounded-[32px] overflow-hidden border-2 border-transparent group-hover:border-black transition-colors duration-300 bg-[#e4ceb4]">
         {image ? (
           <Image
             alt={image.altText || product.title}
@@ -54,6 +56,11 @@ export function ProductItem({
           />
         ) : (
           <div className="w-full aspect-[3/4] bg-[#e4ceb4]" />
+        )}
+        {soldOut && (
+          <span className="absolute bottom-3 left-3 bg-black/70 text-white text-xs font-semibold px-3 py-1 rounded-full">
+            Sold Out
+          </span>
         )}
       </div>
       <div>
