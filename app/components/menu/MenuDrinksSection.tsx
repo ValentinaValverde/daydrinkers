@@ -1,18 +1,51 @@
+import type {Location} from './LocationToggle';
 import ScallopBorder from '~/components/ui/ScallopBorder';
 
-const drinks = [
-  'Espresso',
-  'Americano',
-  'Espresso Tonic',
-  'Macchiato',
-  'Cortado',
-  'Cappuccino',
-  'Latte',
-  'Homemade Nitro Cold Brew',
-  'Drip',
-  'Chai',
-  'Matcha',
-];
+const drinksData: Record<Location, {drinks: string[]; teas: string[]}> = {
+  greenville: {
+    drinks: [
+      'Espresso',
+      'Americano',
+      'Espresso Tonic',
+      'Macchiato',
+      'Cortado',
+      'Cappuccino',
+      'Latte',
+      'Homemade Nitro Cold Brew',
+      'Drip',
+      'Chai',
+      'Matcha',
+    ],
+    teas: [
+      'Earl Grey',
+      'English Breakfast',
+      'Chamomile',
+      'Peppermint',
+      'Green Tea',
+      'Oolong',
+      'Hibiscus',
+    ],
+  },
+  seneca: {
+    drinks: [
+      'Espresso',
+      'Americano',
+      'Cortado',
+      'Cappuccino',
+      'Latte',
+      'Homemade Nitro Cold Brew',
+      'Drip',
+      'Matcha',
+    ],
+    teas: [
+      'Earl Grey',
+      'Chamomile',
+      'Peppermint',
+      'Green Tea',
+      'Hibiscus',
+    ],
+  },
+};
 
 function MenuRow({name, price}: {name: string; price: string}) {
   return (
@@ -24,7 +57,9 @@ function MenuRow({name, price}: {name: string; price: string}) {
   );
 }
 
-export default function MenuDrinksSection() {
+export default function MenuDrinksSection({location}: {location: Location}) {
+  const {drinks, teas} = drinksData[location];
+
   return (
     <>
       <div className="bg-[#f0f2ea] rotate-180">
@@ -56,7 +91,7 @@ export default function MenuDrinksSection() {
                 This is what it looks like when there are no photos.
               </p>
               <div className="flex flex-col gap-4">
-                {drinks.map((name) => (
+                {teas.map((name) => (
                   <MenuRow key={`tea-${name}`} name={name} price="$3.25" />
                 ))}
               </div>

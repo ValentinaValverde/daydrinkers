@@ -1,3 +1,4 @@
+import type {Location} from './LocationToggle';
 import {MenuItemCard} from './shared';
 
 const pastryData = [
@@ -14,7 +15,14 @@ const pastryData = [
   {name: 'Pastry 11', price: '$3.15', image: '/menu-images/pastry-11.png'},
 ];
 
-export default function MenuPastriesSection() {
+const pastryItems: Record<Location, typeof pastryData> = {
+  greenville: pastryData.slice(0, 5),
+  seneca: pastryData.slice(5),
+};
+
+export default function MenuPastriesSection({location}: {location: Location}) {
+  const items = pastryItems[location];
+
   return (
     <section className="bg-[#f0f2ea] px-6 md:px-16 max-w-screen-xl mx-auto py-16 md:py-24">
       <div className="text-center mb-12">
@@ -24,7 +32,7 @@ export default function MenuPastriesSection() {
         </p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-12">
-        {pastryData.map((item, i) => (
+        {items.map((item, i) => (
           <MenuItemCard
             key={i}
             name={item.name}
