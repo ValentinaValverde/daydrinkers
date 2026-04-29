@@ -43,7 +43,7 @@ export function ProductForm({
         return (
           <div key={option.name} className="flex flex-col gap-3">
             <p className="text-sm text-black/60">{option.name}</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-4">
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -67,6 +67,14 @@ export function ProductForm({
                       : 'bg-transparent text-black/30 border-black/30 cursor-not-allowed'
                 }`;
 
+                const swatchClass = `w-8 h-8 rounded-full transition-all duration-200 ${
+                  selected
+                    ? 'ring-2 ring-offset-[3px] ring-black'
+                    : available
+                      ? 'hover:ring-2 hover:ring-offset-2 hover:ring-black/40'
+                      : 'opacity-30 cursor-not-allowed'
+                }`;
+
                 if (isDifferentProduct) {
                   return (
                     <Link
@@ -75,11 +83,25 @@ export function ProductForm({
                       preventScrollReset
                       replace
                       to={`/products/${handle}?${variantUriQuery}`}
-                      className={pillClass}
-                      style={{opacity: available ? 1 : 0.3}}
+                      className={hasSwatch ? swatchClass : pillClass}
+                      style={
+                        hasSwatch
+                          ? {
+                              backgroundColor: swatch?.color || 'transparent',
+                              opacity: available ? 1 : 0.3,
+                            }
+                          : {opacity: available ? 1 : 0.3}
+                      }
+                      aria-label={name}
                     >
                       {hasSwatch ? (
-                        <ProductOptionSwatch swatch={swatch} name={name} />
+                        swatch?.image?.previewImage?.url ? (
+                          <img
+                            src={swatch.image.previewImage.url}
+                            alt={name}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : null
                       ) : (
                         name
                       )}
@@ -91,8 +113,14 @@ export function ProductForm({
                   <button
                     type="button"
                     key={option.name + name}
-                    className={pillClass}
+                    className={hasSwatch ? swatchClass : pillClass}
+                    style={
+                      hasSwatch
+                        ? {backgroundColor: swatch?.color || 'transparent'}
+                        : undefined
+                    }
                     disabled={!exists}
+                    aria-label={name}
                     onClick={() => {
                       if (!selected) {
                         void navigate(`?${variantUriQuery}`, {
@@ -103,7 +131,13 @@ export function ProductForm({
                     }}
                   >
                     {hasSwatch ? (
-                      <ProductOptionSwatch swatch={swatch} name={name} />
+                      swatch?.image?.previewImage?.url ? (
+                        <img
+                          src={swatch.image.previewImage.url}
+                          alt={name}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      ) : null
                     ) : (
                       name
                     )}
