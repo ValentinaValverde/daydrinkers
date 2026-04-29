@@ -1,6 +1,7 @@
 import type {Route} from './+types/collections.all';
-import {useLoaderData, useSearchParams} from 'react-router';
+import {useLoaderData, useSearchParams, useNavigate} from 'react-router';
 import {useEffect, useState} from 'react';
+import {FilterDropdown} from '~/components/ui/FilterDropdown';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
@@ -112,39 +113,27 @@ function buildFilterUrl(
   return `?${next.toString()}`;
 }
 
-const pillBase =
-  'rounded-full px-6 py-2 border-2 border-black flex items-center transition-colors text-sm';
-const pillActive = `${pillBase} bg-black text-white`;
-const pillInactive = `${pillBase} bg-transparent text-black hover:bg-black hover:text-white`;
-
 export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const currentSort = searchParams.get('sort') ?? 'best-selling';
-  const currentAvailability = searchParams.get('availability') ?? 'all';
-  const currentPrice = searchParams.get('price') ?? 'all';
 
   return (
     <div className="min-h-screen bg-[#f0f2ea]">
       <ShopHero />
       <section className="py-16 md:py-24">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          <div className="flex flex-col gap-4 mb-10">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-semibold text-sm">Sort:</span>
-              {SORT_OPTIONS.map((opt) => (
-                <a
-                  key={opt.value}
-                  href={buildFilterUrl(searchParams, 'sort', opt.value)}
-                  className={
-                    currentSort === opt.value ? pillActive : pillInactive
-                  }
-                >
-                  {opt.label}
-                </a>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-8 mb-8">
+            <FilterDropdown
+              label="Sort by"
+              value={currentSort}
+              options={SORT_OPTIONS}
+              onChange={(val) =>
+                navigate(buildFilterUrl(searchParams, 'sort', val))
+              }
+            />
           </div>
           <PaginatedResourceSection<CollectionItemFragment>
             connection={products}
