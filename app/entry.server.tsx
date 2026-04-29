@@ -26,6 +26,7 @@ export default async function handleRequest(
       'https://fonts.googleapis.com',
     ],
     fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+    connectSrc: ['wss://parasite-unfiled-grumpily.ngrok-free.dev:*'],
   });
 
   const body = await renderToReadableStream(
