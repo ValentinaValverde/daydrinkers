@@ -45,9 +45,10 @@ async function loadCriticalData({context, request}: Route.LoaderArgs) {
   if (availability === 'in-stock') queryParts.push('available_for_sale:true');
   else if (availability === 'out-of-stock')
     queryParts.push('available_for_sale:false');
-  if (price === 'under-50') queryParts.push('price:<50');
-  else if (price === '50-100') queryParts.push('price:>=50 price:<=100');
-  else if (price === 'over-100') queryParts.push('price:>100');
+  if (price === 'under-50') queryParts.push('variants.price:<50');
+  else if (price === '50-100')
+    queryParts.push('variants.price:>=50 variants.price:<=100');
+  else if (price === 'over-100') queryParts.push('variants.price:>100');
 
   const filterQuery = queryParts.join(' ');
 
