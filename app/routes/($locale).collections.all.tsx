@@ -1,7 +1,6 @@
 import type {Route} from './+types/collections.all';
-import {useLoaderData} from 'react-router';
+import {useLoaderData, useSearchParams} from 'react-router';
 import {useEffect, useState} from 'react';
-import {FilterDropdown} from '~/components/ui/FilterDropdown';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
@@ -20,8 +19,42 @@ export async function loader(args: Route.LoaderArgs) {
 async function loadCriticalData({context, request}: Route.LoaderArgs) {
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {pageBy: 12});
+  const url = new URL(request.url);
+
+  const sort = url.searchParams.get('sort') ?? 'best-selling';
+  const availability = url.searchParams.get('availability') ?? 'all';
+  const price = url.searchParams.get('price') ?? 'all';
+
+  let sortKey = 'BEST_SELLING';
+  let reverse = false;
+  switch (sort) {
+    case 'price-asc':
+      sortKey = 'PRICE';
+      break;
+    case 'price-desc':
+      sortKey = 'PRICE';
+      reverse = true;
+      break;
+    case 'newest':
+      sortKey = 'CREATED_AT';
+      reverse = true;
+      break;
+  }
+
+  const queryParts = ['status:active'];
+  if (availability === 'in-stock') queryParts.push('available_for_sale:true');
+  else if (availability === 'out-of-stock')
+    queryParts.push('available_for_sale:false');
+  if (price === 'under-50') queryParts.push('price:<50');
+  else if (price === '50-100') queryParts.push('price:>=50 price:<=100');
+  else if (price === 'over-100') queryParts.push('price:>100');
+
+  const filterQuery = queryParts.join(' ');
+
   const [{products}] = await Promise.all([
-    storefront.query(CATALOG_QUERY, {variables: {...paginationVariables}}),
+    storefront.query(CATALOG_QUERY, {
+      variables: {...paginationVariables, sortKey, reverse, filterQuery},
+    }),
   ]);
   return {products};
 }
@@ -59,6 +92,13 @@ function ShopHero() {
   );
 }
 
+const SORT_OPTIONS = [
+  {label: 'Best Selling', value: 'best-selling'},
+  {label: 'Price: Low to high', value: 'price-asc'},
+  {label: 'Price: High to low', value: 'price-desc'},
+  {label: 'Newest', value: 'newest'},
+];
+
 const AVAILABILITY_OPTIONS = [
   {label: 'All', value: 'all'},
   {label: 'In stock', value: 'in-stock'},
@@ -68,48 +108,81 @@ const AVAILABILITY_OPTIONS = [
 const PRICE_OPTIONS = [
   {label: 'All prices', value: 'all'},
   {label: 'Under $50', value: 'under-50'},
-  {label: '$50 - $100', value: '50-100'},
+  {label: '$50–$100', value: '50-100'},
   {label: 'Over $100', value: 'over-100'},
 ];
 
-const SORT_OPTIONS = [
-  {label: 'Best Selling', value: 'best-selling'},
-  {label: 'Price: Low to high', value: 'price-asc'},
-  {label: 'Price: High to low', value: 'price-desc'},
-  {label: 'Newest', value: 'newest'},
-];
+function buildFilterUrl(
+  params: URLSearchParams,
+  key: string,
+  value: string,
+): string {
+  const next = new URLSearchParams(params);
+  next.set(key, value);
+  next.delete('cursor');
+  next.delete('direction');
+  return `?${next.toString()}`;
+}
+
+const pillBase = 'rounded-full px-6 py-2 border-2 border-black flex items-center transition-colors text-sm';
+const pillActive = `${pillBase} bg-black text-white`;
+const pillInactive = `${pillBase} bg-transparent text-black hover:bg-black hover:text-white`;
 
 export default function Collection() {
   const {products} = useLoaderData<typeof loader>();
-  const [availability, setAvailability] = useState('all');
-  const [price, setPrice] = useState('all');
-  const [sortBy, setSortBy] = useState('best-selling');
+  const [searchParams] = useSearchParams();
+
+  const currentSort = searchParams.get('sort') ?? 'best-selling';
+  const currentAvailability = searchParams.get('availability') ?? 'all';
+  const currentPrice = searchParams.get('price') ?? 'all';
 
   return (
     <div className="min-h-screen bg-[#f0f2ea]">
       <ShopHero />
       <section className="py-16 md:py-24">
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
-          {/* <div className="flex flex-wrap gap-8 mb-10">
-            <FilterDropdown
-              label="Availability"
-              value={availability}
-              options={AVAILABILITY_OPTIONS}
-              onChange={setAvailability}
-            />
-            <FilterDropdown
-              label="Price"
-              value={price}
-              options={PRICE_OPTIONS}
-              onChange={setPrice}
-            />
-            <FilterDropdown
-              label="Sort by"
-              value={sortBy}
-              options={SORT_OPTIONS}
-              onChange={setSortBy}
-            />
-          </div> */}
+          <div className="flex flex-col gap-4 mb-10">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-semibold text-sm">Sort:</span>
+              {SORT_OPTIONS.map((opt) => (
+                <a
+                  key={opt.value}
+                  href={buildFilterUrl(searchParams, 'sort', opt.value)}
+                  className={currentSort === opt.value ? pillActive : pillInactive}
+                >
+                  {opt.label}
+                </a>
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-semibold text-sm">Availability:</span>
+              {AVAILABILITY_OPTIONS.map((opt) => (
+                <a
+                  key={opt.value}
+                  href={buildFilterUrl(searchParams, 'availability', opt.value)}
+                  className={
+                    currentAvailability === opt.value ? pillActive : pillInactive
+                  }
+                >
+                  {opt.label}
+                </a>
+              ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-semibold text-sm">Price:</span>
+              {PRICE_OPTIONS.map((opt) => (
+                <a
+                  key={opt.value}
+                  href={buildFilterUrl(searchParams, 'price', opt.value)}
+                  className={
+                    currentPrice === opt.value ? pillActive : pillInactive
+                  }
+                >
+                  {opt.label}
+                </a>
+              ))}
+            </div>
+          </div>
           <PaginatedResourceSection<CollectionItemFragment>
             connection={products}
             resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
@@ -163,8 +236,19 @@ const CATALOG_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
+    $filterQuery: String
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor, query: "status:active") {
+    products(
+      first: $first
+      last: $last
+      before: $startCursor
+      after: $endCursor
+      query: $filterQuery
+      sortKey: $sortKey
+      reverse: $reverse
+    ) {
       nodes {
         ...CollectionItem
       }
