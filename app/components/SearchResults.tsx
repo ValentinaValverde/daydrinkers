@@ -209,7 +209,7 @@ function SearchResultsProducts({
                 </PreviousLink>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {sorted.map((product, i) => {
                   const price = product?.selectedOrFirstAvailableVariant?.price;
                   const image = product?.selectedOrFirstAvailableVariant?.image;
