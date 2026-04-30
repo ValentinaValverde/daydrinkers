@@ -101,7 +101,7 @@ export default function Collections() {
         <div className="max-w-screen-xl mx-auto px-6 md:px-8">
           <PaginatedResourceSection<CollectionFragment>
             connection={collections}
-            resourcesClassName="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+            resourcesClassName="grid grid-cols-2 md:grid-cols-3 gap-6"
           >
             {({node: collection, index}) => (
               <CollectionItem
