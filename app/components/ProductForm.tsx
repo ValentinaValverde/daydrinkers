@@ -203,12 +203,12 @@ export function ProductForm({
         />
       )}
 
-      <Link
+      {/* <Link
         to="/cart"
         className="text-center text-sm underline underline-offset-4 text-black/60 hover:text-black transition-colors"
       >
         More payment options
-      </Link>
+      </Link> */}
 
       <div
         className={`fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-[#f0f2ea] text-sm px-5 py-3 rounded-full shadow-lg transition-all duration-300 pointer-events-none z-50 ${
