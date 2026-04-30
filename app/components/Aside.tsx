@@ -31,7 +31,7 @@ export function Aside({
 }: {
   children?: React.ReactNode;
   type: AsideType;
-  heading: React.ReactNode;
+  heading?: React.ReactNode;
 }) {
   const {type: activeType, close} = useAside();
   const expanded = type === activeType;
@@ -62,21 +62,23 @@ export function Aside({
     >
       <button className="close-outside" onClick={close} />
       <aside>
-        <header className="!border-b !border-black/10 !bg-[#f0f2ea]">
-          <h3
-            id={id}
-            className="text-base font-semibold tracking-wide text-black uppercase"
-          >
-            {heading}
-          </h3>
-          <button
-            className="close reset text-2xl text-black hover:opacity-50 transition-opacity"
-            onClick={close}
-            aria-label="Close"
-          >
-            &times;
-          </button>
-        </header>
+        {heading != null && (
+          <header className="!border-b !border-black/10 !bg-[#f0f2ea]">
+            <h3
+              id={id}
+              className="text-base font-semibold tracking-wide text-black uppercase"
+            >
+              {heading}
+            </h3>
+            <button
+              className="close reset text-2xl text-black hover:opacity-50 transition-opacity"
+              onClick={close}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </header>
+        )}
         <main className="!bg-white">{children}</main>
       </aside>
     </div>

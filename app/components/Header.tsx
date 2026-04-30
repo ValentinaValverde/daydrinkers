@@ -8,6 +8,7 @@ import {
   UserCircleIcon,
   ShoppingBagIcon,
   ListIcon,
+  XIcon,
 } from '@phosphor-icons/react';
 
 interface HeaderProps {
@@ -45,7 +46,7 @@ export function Header({
 
   return (
     <header
-      className={`fixed top-0 z-[60] w-full transition-transform duration-300 ${
+      className={`fixed top-0 z-[110] w-full transition-transform duration-300 ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
@@ -58,7 +59,7 @@ export function Header({
               width={150}
               height={50}
               alt={shop.name}
-              className="h-[50px] w-auto object-contain"
+              className="h-[75px] w-auto object-contain"
             />
           </NavLink>
 
@@ -74,6 +75,7 @@ export function Header({
 }
 
 const NAV_LINKS = [
+  {title: 'Home', url: '/'},
   {title: 'Shop', url: '/collections/all'},
   {title: 'Winter Collection', url: '/collections/winter-edit'},
   {title: 'Menu', url: '/menu'},
@@ -85,10 +87,10 @@ export function HeaderMenu({viewport}: {viewport: Viewport}) {
 
   if (viewport === 'mobile') {
     return (
-      <nav className="flex flex-col gap-4 p-6" role="navigation">
+      <nav className="flex flex-col gap-5 p-6 pt-[74px]" role="navigation">
         {NAV_LINKS.map((link) => (
           <NavLink
-            className="text-sm text-black hover:opacity-60 transition-opacity"
+            className="text-xl text-black hover:opacity-60 transition-opacity"
             end
             key={link.url}
             onClick={close}
@@ -125,7 +127,8 @@ function HeaderCtas({
   isLoggedIn,
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
-  const {open} = useAside();
+  const {open, close, type} = useAside();
+  const isMenuOpen = type === 'mobile';
 
   return (
     <div className="flex gap-4 items-center text-black">
@@ -156,10 +159,10 @@ function HeaderCtas({
       <CartToggle cart={cart} />
       <button
         className="md:hidden hover:opacity-60 transition-opacity cursor-pointer"
-        onClick={() => open('mobile')}
-        aria-label="Menu"
+        onClick={() => (isMenuOpen ? close() : open('mobile'))}
+        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
       >
-        <ListIcon size={24} />
+        {isMenuOpen ? <XIcon size={24} /> : <ListIcon size={24} />}
       </button>
     </div>
   );
