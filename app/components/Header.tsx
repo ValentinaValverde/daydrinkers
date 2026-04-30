@@ -9,6 +9,11 @@ import {
   ShoppingBagIcon,
   ListIcon,
   XIcon,
+  HouseIcon,
+  CoatHangerIcon,
+  SnowflakeIcon,
+  CoffeeIcon,
+  MapPinIcon,
 } from '@phosphor-icons/react';
 
 interface HeaderProps {
@@ -82,25 +87,70 @@ const NAV_LINKS = [
   {title: 'Locations', url: '/locations'},
 ];
 
+const NAV_ICONS: Record<string, React.ReactNode> = {
+  '/': <HouseIcon size={24} />,
+  '/collections/all': <CoatHangerIcon size={24} />,
+  '/collections/winter-edit': <SnowflakeIcon size={24} />,
+  '/menu': <CoffeeIcon size={24} />,
+  '/locations': <MapPinIcon size={24} />,
+};
+
 export function HeaderMenu({viewport}: {viewport: Viewport}) {
   const {close} = useAside();
 
   if (viewport === 'mobile') {
     return (
-      <nav className="flex flex-col gap-5 p-6 pt-[74px]" role="navigation">
-        {NAV_LINKS.map((link) => (
+      <div className="flex flex-col gap-6 p-8 pt-24">
+        {/* Main nav */}
+        <nav className="flex flex-col gap-6" role="navigation">
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+              end
+              key={link.url}
+              onClick={close}
+              prefetch="intent"
+              to={link.url}
+            >
+              {NAV_ICONS[link.url]}
+              {link.title}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="border-t border-[#3c6d8e]" />
+
+        {/* Utility links */}
+        <nav className="flex flex-col gap-6" role="navigation">
           <NavLink
-            className="text-xl text-black hover:opacity-60 transition-opacity"
-            end
-            key={link.url}
+            className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+            to="/search"
             onClick={close}
             prefetch="intent"
-            to={link.url}
           >
-            {link.title}
+            <MagnifyingGlassIcon size={24} />
+            Search
           </NavLink>
-        ))}
-      </nav>
+          <NavLink
+            className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+            to="/account"
+            onClick={close}
+            prefetch="intent"
+          >
+            <UserCircleIcon size={24} />
+            Account
+          </NavLink>
+          <NavLink
+            className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+            to="/cart"
+            onClick={close}
+            prefetch="intent"
+          >
+            <ShoppingBagIcon size={24} />
+            Cart
+          </NavLink>
+        </nav>
+      </div>
     );
   }
 

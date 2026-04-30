@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import {useId} from 'react';
+import {XIcon} from '@phosphor-icons/react';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -61,7 +62,7 @@ export function Aside({
       aria-labelledby={id}
     >
       <button className="close-outside" onClick={close} />
-      <aside>
+      <aside className={type === 'mobile' ? '!bg-[#f0f2ea]' : ''}>
         {heading != null && (
           <header className="!border-b !border-black/10 !bg-[#f0f2ea]">
             <h3
@@ -71,15 +72,17 @@ export function Aside({
               {heading}
             </h3>
             <button
-              className="close reset text-2xl text-black hover:opacity-50 transition-opacity"
+              className="close reset text-black hover:opacity-50 transition-opacity"
               onClick={close}
               aria-label="Close"
             >
-              &times;
+              <XIcon size={20} weight="bold" />
             </button>
           </header>
         )}
-        <main className="!bg-white">{children}</main>
+        <main className={type === 'mobile' ? '!bg-[#f0f2ea] !m-0' : '!bg-white'}>
+          {children}
+        </main>
       </aside>
     </div>
   );
