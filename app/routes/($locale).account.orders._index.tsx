@@ -63,7 +63,7 @@ export default function Orders() {
   const {orders} = customer;
 
   return (
-    <div className="orders">
+    <div className="flex flex-col gap-8">
       <OrderSearchForm currentFilters={filters} />
       <OrdersTable orders={orders} filters={filters} />
     </div>
@@ -80,7 +80,7 @@ function OrdersTable({
   const hasFilters = !!(filters.name || filters.confirmationNumber);
 
   return (
-    <div className="acccount-orders" aria-live="polite">
+    <div aria-live="polite" className="flex flex-col gap-4">
       {orders?.nodes.length ? (
         <PaginatedResourceSection connection={orders}>
           {({node: order}) => <OrderItem key={order.id} order={order} />}
@@ -94,22 +94,30 @@ function OrdersTable({
 
 function EmptyOrders({hasFilters = false}: {hasFilters?: boolean}) {
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {hasFilters ? (
         <>
-          <p>No orders found matching your search.</p>
-          <br />
-          <p>
-            <Link to="/account/orders">Clear filters</Link>
+          <p className="text-base text-black">
+            No orders found matching your search.
           </p>
+          <Link
+            to="/account/orders"
+            className="text-sm font-medium underline text-black"
+          >
+            Clear filters
+          </Link>
         </>
       ) : (
         <>
-          <p>You haven&apos;t placed any orders yet.</p>
-          <br />
-          <p>
-            <Link to="/collections">Start Shopping</Link>
+          <p className="text-base text-black">
+            You haven&apos;t placed any orders yet.
           </p>
+          <Link
+            to="/collections"
+            className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black w-fit hover:bg-black/80 transition-colors"
+          >
+            Start Shopping
+          </Link>
         </>
       )}
     </div>
@@ -152,49 +160,45 @@ function OrderSearchForm({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="order-search-form"
       aria-label="Search orders"
+      className="flex flex-wrap gap-3 items-center"
     >
-      <fieldset className="order-search-fieldset">
-        <legend className="order-search-legend">Filter Orders</legend>
-
-        <div className="order-search-inputs">
-          <input
-            type="search"
-            name={ORDER_FILTER_FIELDS.NAME}
-            placeholder="Order #"
-            aria-label="Order number"
-            defaultValue={currentFilters.name || ''}
-            className="order-search-input"
-          />
-          <input
-            type="search"
-            name={ORDER_FILTER_FIELDS.CONFIRMATION_NUMBER}
-            placeholder="Confirmation #"
-            aria-label="Confirmation number"
-            defaultValue={currentFilters.confirmationNumber || ''}
-            className="order-search-input"
-          />
-        </div>
-
-        <div className="order-search-buttons">
-          <button type="submit" disabled={isSearching}>
-            {isSearching ? 'Searching' : 'Search'}
-          </button>
-          {hasFilters && (
-            <button
-              type="button"
-              disabled={isSearching}
-              onClick={() => {
-                setSearchParams(new URLSearchParams());
-                formRef.current?.reset();
-              }}
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      </fieldset>
+      <input
+        type="search"
+        name={ORDER_FILTER_FIELDS.NAME}
+        placeholder="Order #"
+        aria-label="Order number"
+        defaultValue={currentFilters.name || ''}
+        className="rounded-full border border-black/20 px-5 py-2.5 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors"
+      />
+      <input
+        type="search"
+        name={ORDER_FILTER_FIELDS.CONFIRMATION_NUMBER}
+        placeholder="Confirmation #"
+        aria-label="Confirmation number"
+        defaultValue={currentFilters.confirmationNumber || ''}
+        className="rounded-full border border-black/20 px-5 py-2.5 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors"
+      />
+      <button
+        type="submit"
+        disabled={isSearching}
+        className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50"
+      >
+        {isSearching ? 'Searching…' : 'Search'}
+      </button>
+      {hasFilters && (
+        <button
+          type="button"
+          disabled={isSearching}
+          className="rounded-full px-6 py-2.5 text-sm font-medium border border-black bg-transparent text-black hover:bg-black/5 transition-colors disabled:opacity-50"
+          onClick={() => {
+            setSearchParams(new URLSearchParams());
+            formRef.current?.reset();
+          }}
+        >
+          Clear
+        </button>
+      )}
     </form>
   );
 }
@@ -202,21 +206,39 @@ function OrderSearchForm({
 function OrderItem({order}: {order: OrderItemFragment}) {
   const fulfillmentStatus = flattenConnection(order.fulfillments)[0]?.status;
   return (
-    <>
-      <fieldset>
-        <Link to={`/account/orders/${btoa(order.id)}`}>
-          <strong>#{order.number}</strong>
+    <div className="bg-white/60 rounded-[32px] p-6 border border-black/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-1">
+        <Link
+          to={`/account/orders/${btoa(order.id)}`}
+          className="text-base font-semibold text-black hover:underline"
+        >
+          #{order.number}
         </Link>
-        <p>{new Date(order.processedAt).toDateString()}</p>
+        <p className="text-sm text-black/60">
+          {new Date(order.processedAt).toDateString()}
+        </p>
         {order.confirmationNumber && (
-          <p>Confirmation: {order.confirmationNumber}</p>
+          <p className="text-sm text-black/60">
+            Confirmation: {order.confirmationNumber}
+          </p>
         )}
-        <p>{order.financialStatus}</p>
-        {fulfillmentStatus && <p>{fulfillmentStatus}</p>}
-        <Money data={order.totalPrice} />
-        <Link to={`/account/orders/${btoa(order.id)}`}>View Order</Link>
-      </fieldset>
-      <br />
-    </>
+      </div>
+      <div className="flex flex-col sm:items-end gap-1">
+        <p className="text-sm text-black">{order.financialStatus}</p>
+        {fulfillmentStatus && (
+          <p className="text-sm text-black/60">{fulfillmentStatus}</p>
+        )}
+        <Money
+          data={order.totalPrice}
+          className="text-base font-semibold text-black"
+        />
+      </div>
+      <Link
+        to={`/account/orders/${btoa(order.id)}`}
+        className="rounded-full px-6 py-2.5 text-sm font-medium border border-black bg-transparent text-black hover:bg-black/5 transition-colors w-fit"
+      >
+        View Order
+      </Link>
+    </div>
   );
 }
