@@ -87,27 +87,29 @@ export default function MenuSeasonalSection({location}: {location: Location}) {
         <ScallopBorder color="#e4ceb4" />
       </div>
 
-      <section className="bg-[#e4ceb4] rounded-b-[32px] pb-24 px-6 md:px-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-semibold text-black">
-            Seasonal Selections
-          </h2>
-          <p className="text-base text-black mt-2">
-            Lorem ipsum dolor sit amet.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-          {items.map((item, i) => (
-            <MenuItemCard
-              key={i}
-              name={item.name}
-              price={item.price}
-              image={item.image}
-              tag={item.tag}
-            />
-          ))}
-        </div>
-      </section>
+      <div className="bg-[#e4ceb4] rounded-b-[32px] ">
+        <section className="px-6 md:px-16 max-w-screen-xl mx-auto py-16 md:py-24">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-semibold text-black">
+              Seasonal Selections
+            </h2>
+            {/* <p className="text-base text-black mt-2">
+              Lorem ipsum dolor sit amet.
+            </p> */}
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {items.map((item, i) => (
+              <MenuItemCard
+                key={i}
+                name={item.name}
+                price={item.price}
+                image={item.image}
+                tag={item.tag}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </>
   );
 }
