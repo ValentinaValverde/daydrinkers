@@ -4,6 +4,7 @@ import MenuHeroSection from '~/components/menu/MenuHeroSection';
 import MenuPastriesSection from '~/components/menu/MenuPastriesSection';
 import MenuDrinksSection from '~/components/menu/MenuDrinksSection';
 import MenuGrabAndGoSection from '~/components/menu/MenuGrabAndGoSection';
+import MenuSeasonalSection from '~/components/menu/MenuSeasonalSection';
 import MenuCollageSection from '~/components/menu/MenuCollageSection';
 import LocationToggle, {type Location} from '~/components/menu/LocationToggle';
 
@@ -20,7 +21,8 @@ export default function MenuPage() {
       <LocationToggle location={location} onLocationChange={setLocation} />
       <MenuPastriesSection location={location} />
       <MenuGrabAndGoSection location={location} />
-      <MenuDrinksSection location={location} />
+      <MenuSeasonalSection location={location} />
+      {/* <MenuDrinksSection location={location} /> */}
       <MenuCollageSection />
     </div>
   );
