@@ -1,19 +1,37 @@
 import type {Location} from './LocationToggle';
 import {MenuItemCard} from './shared';
 
-const grabAndGoItems: Record<Location, {name: string; price: string; image: string}[]> = {
+type GrabAndGoItem = {name: string; price: string; image: string; tag?: string};
+
+const sharedItems: GrabAndGoItem[] = [
+  {
+    name: 'Bacon egg and cheese sandwich',
+    price: '$3.15',
+    image: '/menu-images/pastry-3.png',
+  },
+  {
+    name: 'Bacon and cheese Quiche bites',
+    price: '$3.15',
+    image: '/menu-images/pastry-7.png',
+  },
+  {
+    name: 'Spinach tomato feta quiche bites',
+    price: '$3.15',
+    image: '/menu-images/pastry-1.png',
+  },
+];
+
+const grabAndGoItems: Record<Location, GrabAndGoItem[]> = {
   greenville: [
-    {name: 'Item 1', price: '$3.15', image: '/menu-images/pastry-5.png'},
-    {name: 'Item 2', price: '$3.15', image: '/menu-images/pastry-2.png'},
-    {name: 'Item 3', price: '$3.15', image: '/menu-images/pastry-3.png'},
-    {name: 'Item 4', price: '$3.15', image: '/menu-images/pastry-4.png'},
+    {name: 'Energy bites', price: '$3.15', image: '/menu-images/pastry-5.png'},
+    {
+      name: 'PB chocolate chip overnight oats',
+      price: '$3.15',
+      image: '/menu-images/pastry-2.png',
+    },
+    ...sharedItems,
   ],
-  seneca: [
-    {name: 'Item 5', price: '$3.15', image: '/menu-images/pastry-6.png'},
-    {name: 'Item 6', price: '$3.15', image: '/menu-images/pastry-7.png'},
-    {name: 'Item 7', price: '$3.15', image: '/menu-images/pastry-8.png'},
-    {name: 'Item 8', price: '$3.15', image: '/menu-images/pastry-9.png'},
-  ],
+  seneca: [...sharedItems],
 };
 
 export default function MenuGrabAndGoSection({location}: {location: Location}) {
@@ -24,7 +42,8 @@ export default function MenuGrabAndGoSection({location}: {location: Location}) {
       <div className="text-center mb-12">
         <h2 className="text-3xl font-semibold text-black">Grab &amp; Go</h2>
         <p className="text-base text-black mt-2">
-          Perfect for busy mornings or afternoon cravings — grab something good on your way.
+          Perfect for busy mornings or afternoon cravings — grab something good
+          on your way.
         </p>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
@@ -34,6 +53,7 @@ export default function MenuGrabAndGoSection({location}: {location: Location}) {
             name={item.name}
             price={item.price}
             image={item.image}
+            tag={item.tag}
           />
         ))}
       </div>

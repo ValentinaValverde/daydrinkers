@@ -1,23 +1,56 @@
 import type {Location} from './LocationToggle';
 import {MenuItemCard} from './shared';
 
-const pastryData = [
-  {name: 'Pastry 1', price: '$3.15', image: '/menu-images/pastry-1.png'},
-  {name: 'Pastry 2', price: '$3.15', image: '/menu-images/pastry-2.png'},
-  {name: 'Pastry 3', price: '$3.15', image: '/menu-images/pastry-3.png'},
-  {name: 'Pastry 4', price: '$3.15', image: '/menu-images/pastry-4.png'},
-  {name: 'Pastry 5', price: '$3.15', image: '/menu-images/pastry-5.png'},
-  {name: 'Pastry 6', price: '$3.15', image: '/menu-images/pastry-6.png'},
-  {name: 'Pastry 7', price: '$3.15', image: '/menu-images/pastry-7.png'},
-  {name: 'Pastry 8', price: '$3.15', image: '/menu-images/pastry-8.png'},
-  {name: 'Pastry 9', price: '$3.15', image: '/menu-images/pastry-9.png'},
-  {name: 'Pastry 10', price: '$3.15', image: '/menu-images/pastry-10.png'},
-  {name: 'Pastry 11', price: '$3.15', image: '/menu-images/pastry-11.png'},
+type PastryItem = {name: string; price: string; image: string; tag?: string};
+
+const sharedPastries: PastryItem[] = [
+  {
+    name: 'Chocolate chip cookie',
+    price: '$3.15',
+    image: '/menu-images/pastry-3.png',
+  },
+  {
+    name: 'GF banana chocolate chip loaf',
+    price: '$3.15',
+    image: '/menu-images/pastry-7.png',
+  },
+  {
+    name: 'Cinnamon roll',
+    price: '$3.15',
+    image: '/menu-images/pastry-1.png',
+    tag: 'Saturdays only',
+  },
 ];
 
-const pastryItems: Record<Location, typeof pastryData> = {
-  greenville: pastryData.slice(0, 5),
-  seneca: pastryData.slice(5),
+const pastryItems: Record<Location, PastryItem[]> = {
+  greenville: [...sharedPastries],
+  seneca: [
+    ...sharedPastries,
+    {
+      name: 'Bacon, egg, and cheese sandwich',
+      price: '$3.15',
+      image: '/menu-images/pastry-6.png',
+      tag: 'Fri-Sun only',
+    },
+    {
+      name: 'Garden press sandwich',
+      price: '$3.15',
+      image: '/menu-images/pastry-7.png',
+      tag: 'Fri-Sun only',
+    },
+    {
+      name: 'Avocado smash toast',
+      price: '$3.15',
+      image: '/menu-images/pastry-8.png',
+      tag: 'Fri-Sun only',
+    },
+    {
+      name: 'Waffle with topping',
+      price: '$3.15',
+      image: '/menu-images/pastry-9.png',
+      tag: 'Fri-Sun only',
+    },
+  ],
 };
 
 export default function MenuPastriesSection({location}: {location: Location}) {
@@ -38,6 +71,7 @@ export default function MenuPastriesSection({location}: {location: Location}) {
             name={item.name}
             price={item.price}
             image={item.image}
+            tag={item.tag}
           />
         ))}
       </div>
