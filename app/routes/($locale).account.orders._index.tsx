@@ -107,7 +107,7 @@ function EmptyOrders({hasFilters = false}: {hasFilters?: boolean}) {
           <p className="text-base text-black">
             You haven&apos;t placed any orders yet.
           </p>
-          <PrimaryButton text="Start shopping" link="/collections" />
+          <PrimaryButton text="Start shopping" link="/collections/all" />
         </div>
       )}
     </div>
