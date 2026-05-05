@@ -15,23 +15,21 @@ export const meta: Route.MetaFunction = () => {
   return [{title: 'Daydrinkers'}];
 };
 
-type HomeProductsResult = {
+type HomeDataResult = {
+  winterCollection: {products: {nodes: ProductItemFragment[]}} | null;
   products: {nodes: ProductItemFragment[]};
 };
 
 export async function loader({context}: Route.LoaderArgs) {
   const {storefront} = context;
 
-  // Fetch 8 best-selling products in one request and split between the two sections
   const data = await storefront
-    .query(HOME_PRODUCTS_QUERY, {variables: {first: 8}})
-    .catch(() => null) as HomeProductsResult | null;
-
-  const allProducts = data?.products?.nodes ?? [];
+    .query(HOME_PRODUCTS_QUERY, {variables: {winterFirst: 5, shopFirst: 3}})
+    .catch(() => null) as HomeDataResult | null;
 
   return {
-    winterProducts: allProducts.slice(0, 5),
-    shopProducts: allProducts.slice(5, 8),
+    winterProducts: data?.winterCollection?.products?.nodes ?? [],
+    shopProducts: data?.products?.nodes ?? [],
   };
 }
 
@@ -83,11 +81,19 @@ const HOME_PRODUCTS_QUERY = `#graphql
     }
   }
   query HomeProducts(
-    $first: Int!
+    $winterFirst: Int!
+    $shopFirst: Int!
     $country: CountryCode
     $language: LanguageCode
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, sortKey: BEST_SELLING) {
+    winterCollection: collection(handle: "winter-edit") {
+      products(first: $winterFirst) {
+        nodes {
+          ...HomeProductItem
+        }
+      }
+    }
+    products(first: $shopFirst, sortKey: BEST_SELLING) {
       nodes {
         ...HomeProductItem
       }
