@@ -79,6 +79,9 @@ export async function action({request, context}: Route.ActionArgs) {
   }
 }
 
+const inputClass =
+  'w-full rounded-2xl border border-2 border-black/20 px-4 py-3 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors';
+
 export default function AccountProfile() {
   const account = useOutletContext<{customer: CustomerFragment}>();
   const {state} = useNavigation();
@@ -86,13 +89,13 @@ export default function AccountProfile() {
   const customer = action?.customer ?? account?.customer;
 
   return (
-    <div className="account-profile">
-      <h2>My profile</h2>
-      <br />
-      <Form method="PUT">
-        <legend>Personal information</legend>
-        <fieldset>
-          <label htmlFor="firstName">First name</label>
+    <div className="max-w-md flex flex-col gap-6">
+      <h2 className="text-2xl font-semibold text-black">My profile</h2>
+      <Form method="PUT" className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="firstName" className="text-sm font-medium text-black">
+            First name
+          </label>
           <input
             id="firstName"
             name="firstName"
@@ -102,8 +105,13 @@ export default function AccountProfile() {
             aria-label="First name"
             defaultValue={customer.firstName ?? ''}
             minLength={2}
+            className={inputClass}
           />
-          <label htmlFor="lastName">Last name</label>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="lastName" className="text-sm font-medium text-black">
+            Last name
+          </label>
           <input
             id="lastName"
             name="lastName"
@@ -113,19 +121,18 @@ export default function AccountProfile() {
             aria-label="Last name"
             defaultValue={customer.lastName ?? ''}
             minLength={2}
+            className={inputClass}
           />
-        </fieldset>
-        {action?.error ? (
-          <p>
-            <mark>
-              <small>{action.error}</small>
-            </mark>
-          </p>
-        ) : (
-          <br />
+        </div>
+        {action?.error && (
+          <p className="text-sm text-red-600">{action.error}</p>
         )}
-        <button type="submit" disabled={state !== 'idle'}>
-          {state !== 'idle' ? 'Updating' : 'Update'}
+        <button
+          type="submit"
+          disabled={state !== 'idle'}
+          className="cursor-pointer rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 w-fit"
+        >
+          {state !== 'idle' ? 'Updating…' : 'Update'}
         </button>
       </Form>
     </div>

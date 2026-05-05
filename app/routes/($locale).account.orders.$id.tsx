@@ -82,21 +82,37 @@ export default function OrderRoute() {
     fulfillmentStatus,
   } = useLoaderData<typeof loader>();
   return (
-    <div className="account-order">
-      <h2>Order {order.name}</h2>
-      <p>Placed on {new Date(order.processedAt!).toDateString()}</p>
-      {order.confirmationNumber && (
-        <p>Confirmation: {order.confirmationNumber}</p>
-      )}
-      <br />
-      <div>
-        <table>
+    <div className="flex flex-col gap-8 max-w-2xl">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-semibold text-black">
+          Order {order.name}
+        </h2>
+        <p className="text-sm text-black/60">
+          Placed on {new Date(order.processedAt!).toDateString()}
+        </p>
+        {order.confirmationNumber && (
+          <p className="text-sm text-black/60">
+            Confirmation: {order.confirmationNumber}
+          </p>
+        )}
+      </div>
+
+      <div className="bg-white/60 rounded-[32px] border border-black/10 overflow-hidden">
+        <table className="w-full text-sm text-black">
           <thead>
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Total</th>
+            <tr className="border-b border-black/10">
+              <th scope="col" className="text-left px-6 py-4 font-medium">
+                Product
+              </th>
+              <th scope="col" className="text-left px-6 py-4 font-medium">
+                Price
+              </th>
+              <th scope="col" className="text-left px-6 py-4 font-medium">
+                Qty
+              </th>
+              <th scope="col" className="text-left px-6 py-4 font-medium">
+                Total
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -105,17 +121,14 @@ export default function OrderRoute() {
               <OrderLineRow key={lineItemIndex} lineItem={lineItem} />
             ))}
           </tbody>
-          <tfoot>
+          <tfoot className="border-t border-black/10">
             {((discountValue && discountValue.amount) ||
               discountPercentage) && (
-              <tr>
-                <th scope="row" colSpan={3}>
-                  <p>Discounts</p>
-                </th>
-                <th scope="row">
-                  <p>Discounts</p>
-                </th>
-                <td>
+              <tr className="border-t border-black/10">
+                <td colSpan={3} className="px-6 py-3 text-black/60">
+                  Discounts
+                </td>
+                <td className="px-6 py-3">
                   {discountPercentage ? (
                     <span>-{discountPercentage}% OFF</span>
                   ) : (
@@ -125,96 +138,96 @@ export default function OrderRoute() {
               </tr>
             )}
             <tr>
-              <th scope="row" colSpan={3}>
-                <p>Subtotal</p>
-              </th>
-              <th scope="row">
-                <p>Subtotal</p>
-              </th>
-              <td>
+              <td colSpan={3} className="px-6 py-3 text-black/60">
+                Subtotal
+              </td>
+              <td className="px-6 py-3">
                 <Money data={order.subtotal!} />
               </td>
             </tr>
             <tr>
-              <th scope="row" colSpan={3}>
+              <td colSpan={3} className="px-6 py-3 text-black/60">
                 Tax
-              </th>
-              <th scope="row">
-                <p>Tax</p>
-              </th>
-              <td>
+              </td>
+              <td className="px-6 py-3">
                 <Money data={order.totalTax!} />
               </td>
             </tr>
-            <tr>
-              <th scope="row" colSpan={3}>
+            <tr className="border-t border-black/10">
+              <td colSpan={3} className="px-6 py-4 font-semibold">
                 Total
-              </th>
-              <th scope="row">
-                <p>Total</p>
-              </th>
-              <td>
+              </td>
+              <td className="px-6 py-4 font-semibold">
                 <Money data={order.totalPrice!} />
               </td>
             </tr>
           </tfoot>
         </table>
-        <div>
-          <h3>Shipping Address</h3>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-6">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-semibold text-black">
+            Shipping Address
+          </h3>
           {order?.shippingAddress ? (
-            <address>
+            <address className="not-italic text-sm text-black/70 flex flex-col gap-0.5">
               <p>{order.shippingAddress.name}</p>
-              {order.shippingAddress.formatted ? (
+              {order.shippingAddress.formatted && (
                 <p>{order.shippingAddress.formatted}</p>
-              ) : (
-                ''
               )}
-              {order.shippingAddress.formattedArea ? (
+              {order.shippingAddress.formattedArea && (
                 <p>{order.shippingAddress.formattedArea}</p>
-              ) : (
-                ''
               )}
             </address>
           ) : (
-            <p>No shipping address defined</p>
+            <p className="text-sm text-black/60">No shipping address defined</p>
           )}
-          <h3>Status</h3>
-          <div>
-            <p>{fulfillmentStatus}</p>
-          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h3 className="text-base font-semibold text-black">Status</h3>
+          <p className="text-sm text-black/70">{fulfillmentStatus}</p>
         </div>
       </div>
-      <br />
-      <p>
-        <a target="_blank" href={order.statusPageUrl} rel="noreferrer">
-          View Order Status
-        </a>
-      </p>
+
+      <a
+        target="_blank"
+        href={order.statusPageUrl}
+        rel="noreferrer"
+        className="rounded-full px-6 py-2.5 text-sm font-medium border border-black bg-transparent text-black hover:bg-black/5 transition-colors w-fit"
+      >
+        View Order Status
+      </a>
     </div>
   );
 }
 
 function OrderLineRow({lineItem}: {lineItem: OrderLineItemFullFragment}) {
   return (
-    <tr key={lineItem.id}>
-      <td>
-        <div>
+    <tr className="border-t border-black/10">
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
           {lineItem?.image && (
-            <div>
-              <Image data={lineItem.image} width={96} height={96} />
-            </div>
+            <Image
+              data={lineItem.image}
+              width={64}
+              height={64}
+              className="rounded-xl object-cover flex-shrink-0"
+            />
           )}
           <div>
-            <p>{lineItem.title}</p>
-            <small>{lineItem.variantTitle}</small>
+            <p className="font-medium">{lineItem.title}</p>
+            {lineItem.variantTitle && (
+              <p className="text-xs text-black/50">{lineItem.variantTitle}</p>
+            )}
           </div>
         </div>
       </td>
-      <td>
+      <td className="px-6 py-4">
         <Money data={lineItem.price!} />
       </td>
-      <td>{lineItem.quantity}</td>
-      <td>
+      <td className="px-6 py-4">{lineItem.quantity}</td>
+      <td className="px-6 py-4">
         <Money data={lineItem.totalDiscount!} />
       </td>
     </tr>
