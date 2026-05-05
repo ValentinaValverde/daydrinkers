@@ -47,14 +47,18 @@ export default function LocationCardsSection() {
             </a>
 
             {/* Details */}
-            <div className="w-full md:w-1/2 flex flex-col gap-4">
+            <div className="w-full md:w-1/2 flex flex-col items-center md:items-start gap-4">
               <div>
-                <h2 className="text-3xl font-medium text-black">
+                <h2 className="text-3xl font-medium text-black text-center md:text-start">
                   {location.name}
                 </h2>
-                <p className="text-base text-black mt-1">{location.address}</p>
+                <p className="text-base text-black mt-1 text-center md:text-start">
+                  {location.address}
+                </p>
               </div>
-              <p className="text-base text-black">{location.description}</p>
+              <p className="text-base text-black text-center md:text-start">
+                {location.description}
+              </p>
               <PrimaryButton
                 text=" Get Directions"
                 link={location.link}

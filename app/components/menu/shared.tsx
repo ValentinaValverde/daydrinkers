@@ -2,10 +2,12 @@ export function MenuItemCard({
   name,
   price,
   image,
+  tag,
 }: {
   name: string;
   price: string;
   image?: string;
+  tag?: string;
 }) {
   return (
     <div className="flex flex-col items-center justify-end gap-8">
@@ -22,7 +24,12 @@ export function MenuItemCard({
           </span>
         </div>
       )}
-      <div className="flex flex-col items-center gap-1 text-center text-black">
+      <div className="flex flex-col items-center gap-2 text-center text-black">
+        {tag && (
+          <span className="text-xs font-medium text-[#3c6d8e] bg-[#3c6d8e]/10 px-2.5 py-0.5 rounded-full">
+            {tag}
+          </span>
+        )}
         <p className="font-medium text-lg leading-tight">{name}</p>
         <p className="text-sm">{price}</p>
       </div>

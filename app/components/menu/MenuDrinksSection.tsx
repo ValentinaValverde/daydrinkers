@@ -50,8 +50,8 @@ const drinksData: Record<Location, {drinks: string[]; teas: string[]}> = {
 function MenuRow({name, price}: {name: string; price: string}) {
   return (
     <div className="flex items-end gap-2 text-black">
-      <span className="font-semibold text-xl whitespace-nowrap">{name}</span>
-      <span className="flex-1 border-b border-dotted border-black/50 mb-[5px]" />
+      <span className="font-semibold text-xl">{name}</span>
+      <span className="flex-1 min-w-4 border-b border-dotted border-black/50 mb-[5px]" />
       <span className="text-xl whitespace-nowrap">{price}</span>
     </div>
   );

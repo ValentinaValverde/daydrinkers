@@ -30,7 +30,7 @@ export function CartLineItem({
 
   if (layout === 'page') {
     return (
-      <li className="flex items-start gap-8 py-5 first:pt-0 last:pb-0">
+      <li className="flex flex-col md:flex-row items-start gap-8 py-5 first:pt-0 last:pb-0">
         {image && (
           <div className="rounded-xl overflow-hidden shrink-0 w-32 h-32">
             <Image

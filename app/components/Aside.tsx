@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import {useId} from 'react';
+import {XIcon} from '@phosphor-icons/react';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -31,7 +32,7 @@ export function Aside({
 }: {
   children?: React.ReactNode;
   type: AsideType;
-  heading: React.ReactNode;
+  heading?: React.ReactNode;
 }) {
   const {type: activeType, close} = useAside();
   const expanded = type === activeType;
@@ -61,23 +62,27 @@ export function Aside({
       aria-labelledby={id}
     >
       <button className="close-outside" onClick={close} />
-      <aside>
-        <header className="!border-b !border-black/10 !bg-[#f0f2ea]">
-          <h3
-            id={id}
-            className="text-base font-semibold tracking-wide text-black uppercase"
-          >
-            {heading}
-          </h3>
-          <button
-            className="close reset text-2xl text-black hover:opacity-50 transition-opacity"
-            onClick={close}
-            aria-label="Close"
-          >
-            &times;
-          </button>
-        </header>
-        <main className="!bg-white">{children}</main>
+      <aside className={type === 'mobile' ? '!bg-[#f0f2ea]' : ''}>
+        {heading != null && (
+          <header className="!border-b !border-black/10 !bg-[#f0f2ea]">
+            <h3
+              id={id}
+              className="text-base font-semibold tracking-wide text-black uppercase"
+            >
+              {heading}
+            </h3>
+            <button
+              className="close reset text-black hover:opacity-50 transition-opacity"
+              onClick={close}
+              aria-label="Close"
+            >
+              <XIcon size={20} weight="bold" />
+            </button>
+          </header>
+        )}
+        <main className={type === 'mobile' ? '!bg-[#f0f2ea] !m-0' : '!bg-white'}>
+          {children}
+        </main>
       </aside>
     </div>
   );

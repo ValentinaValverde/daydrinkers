@@ -8,6 +8,12 @@ import {
   UserCircleIcon,
   ShoppingBagIcon,
   ListIcon,
+  XIcon,
+  HouseIcon,
+  CoatHangerIcon,
+  SnowflakeIcon,
+  CoffeeIcon,
+  MapPinIcon,
 } from '@phosphor-icons/react';
 
 interface HeaderProps {
@@ -45,7 +51,7 @@ export function Header({
 
   return (
     <header
-      className={`fixed top-0 z-[60] w-full transition-transform duration-300 ${
+      className={`fixed top-0 z-[110] w-full transition-transform duration-300 ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
@@ -58,7 +64,7 @@ export function Header({
               width={150}
               height={50}
               alt={shop.name}
-              className="h-[50px] w-auto object-contain"
+              className="h-[75px] w-auto object-contain"
             />
           </NavLink>
 
@@ -74,31 +80,77 @@ export function Header({
 }
 
 const NAV_LINKS = [
+  {title: 'Home', url: '/'},
   {title: 'Shop', url: '/collections/all'},
   {title: 'Winter Collection', url: '/collections/winter-edit'},
   {title: 'Menu', url: '/menu'},
   {title: 'Locations', url: '/locations'},
 ];
 
+const NAV_ICONS: Record<string, React.ReactNode> = {
+  '/': <HouseIcon size={24} />,
+  '/collections/all': <CoatHangerIcon size={24} />,
+  '/collections/winter-edit': <SnowflakeIcon size={24} />,
+  '/menu': <CoffeeIcon size={24} />,
+  '/locations': <MapPinIcon size={24} />,
+};
+
 export function HeaderMenu({viewport}: {viewport: Viewport}) {
   const {close} = useAside();
 
   if (viewport === 'mobile') {
     return (
-      <nav className="flex flex-col gap-4 p-6" role="navigation">
-        {NAV_LINKS.map((link) => (
+      <div className="flex flex-col gap-6 p-8 pt-24">
+        {/* Main nav */}
+        <nav className="flex flex-col gap-6" role="navigation">
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+              end
+              key={link.url}
+              onClick={close}
+              prefetch="intent"
+              to={link.url}
+            >
+              {NAV_ICONS[link.url]}
+              {link.title}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="border-t border-[#3c6d8e]" />
+
+        {/* Utility links */}
+        <nav className="flex flex-col gap-6" role="navigation">
           <NavLink
-            className="text-sm text-black hover:opacity-60 transition-opacity"
-            end
-            key={link.url}
+            className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+            to="/search"
             onClick={close}
             prefetch="intent"
-            to={link.url}
           >
-            {link.title}
+            <MagnifyingGlassIcon size={24} />
+            Search
           </NavLink>
-        ))}
-      </nav>
+          <NavLink
+            className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+            to="/account"
+            onClick={close}
+            prefetch="intent"
+          >
+            <UserCircleIcon size={24} />
+            Account
+          </NavLink>
+          <NavLink
+            className="flex items-center gap-4 text-xl text-black hover:opacity-60 transition-opacity"
+            to="/cart"
+            onClick={close}
+            prefetch="intent"
+          >
+            <ShoppingBagIcon size={24} />
+            Cart
+          </NavLink>
+        </nav>
+      </div>
     );
   }
 
@@ -125,7 +177,8 @@ function HeaderCtas({
   isLoggedIn,
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
-  const {open} = useAside();
+  const {open, close, type} = useAside();
+  const isMenuOpen = type === 'mobile';
 
   return (
     <div className="flex gap-4 items-center text-black">
@@ -156,10 +209,10 @@ function HeaderCtas({
       <CartToggle cart={cart} />
       <button
         className="md:hidden hover:opacity-60 transition-opacity cursor-pointer"
-        onClick={() => open('mobile')}
-        aria-label="Menu"
+        onClick={() => (isMenuOpen ? close() : open('mobile'))}
+        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
       >
-        <ListIcon size={24} />
+        {isMenuOpen ? <XIcon size={24} /> : <ListIcon size={24} />}
       </button>
     </div>
   );

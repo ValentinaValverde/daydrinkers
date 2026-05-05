@@ -261,26 +261,20 @@ export default function Addresses() {
   const {defaultAddress, addresses} = customer;
 
   return (
-    <div className="account-addresses">
-      <h2>Addresses</h2>
-      <br />
-      <div>
-        <div>
-          <legend>Create address</legend>
-          <NewAddressForm key={addresses.nodes.length} />
-        </div>
-        <br />
-        <hr />
-        <br />
-        {!addresses.nodes.length ? (
-          <p>You have no addresses saved.</p>
-        ) : (
-          <ExistingAddresses
-            addresses={addresses}
-            defaultAddress={defaultAddress}
-          />
-        )}
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-6">
+        <h2 className="text-2xl font-semibold text-black">Add new address</h2>
+        <NewAddressForm key={addresses.nodes.length} />
       </div>
+      <hr className="border-black/10" />
+      {!addresses.nodes.length ? (
+        <p className="text-base text-black">You have no addresses saved.</p>
+      ) : (
+        <ExistingAddresses
+          addresses={addresses}
+          defaultAddress={defaultAddress}
+        />
+      )}
     </div>
   );
 }
@@ -307,15 +301,14 @@ function NewAddressForm() {
       defaultAddress={null}
     >
       {({stateForMethod}) => (
-        <div>
-          <button
-            disabled={stateForMethod('POST') !== 'idle'}
-            formMethod="POST"
-            type="submit"
-          >
-            {stateForMethod('POST') !== 'idle' ? 'Creating' : 'Create'}
-          </button>
-        </div>
+        <button
+          disabled={stateForMethod('POST') !== 'idle'}
+          formMethod="POST"
+          type="submit"
+          className="cursor-pointer rounded-full px-6 py-2.5 text-sm bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 w-fit"
+        >
+          {stateForMethod('POST') !== 'idle' ? 'Creating…' : 'Create'}
+        </button>
       )}
     </AddressForm>
   );
@@ -326,8 +319,8 @@ function ExistingAddresses({
   defaultAddress,
 }: Pick<CustomerFragment, 'addresses' | 'defaultAddress'>) {
   return (
-    <div>
-      <legend>Existing addresses</legend>
+    <div className="flex flex-col gap-10">
+      <h2 className="text-2xl font-semibold text-black">Saved addresses</h2>
       {addresses.nodes.map((address) => (
         <AddressForm
           key={address.id}
@@ -336,20 +329,22 @@ function ExistingAddresses({
           defaultAddress={defaultAddress}
         >
           {({stateForMethod}) => (
-            <div>
+            <div className="flex gap-3">
               <button
                 disabled={stateForMethod('PUT') !== 'idle'}
                 formMethod="PUT"
                 type="submit"
+                className="cursor-pointer rounded-full px-6 py-2.5 text-sm bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50"
               >
-                {stateForMethod('PUT') !== 'idle' ? 'Saving' : 'Save'}
+                {stateForMethod('PUT') !== 'idle' ? 'Saving…' : 'Save'}
               </button>
               <button
                 disabled={stateForMethod('DELETE') !== 'idle'}
                 formMethod="DELETE"
                 type="submit"
+                className="cursor-pointer rounded-full px-6 py-2.5 text-sm border border-2 border-black bg-transparent text-black hover:bg-black/5 transition-colors disabled:opacity-50"
               >
-                {stateForMethod('DELETE') !== 'idle' ? 'Deleting' : 'Delete'}
+                {stateForMethod('DELETE') !== 'idle' ? 'Deleting…' : 'Delete'}
               </button>
             </div>
           )}
@@ -358,6 +353,10 @@ function ExistingAddresses({
     </div>
   );
 }
+
+const inputClass =
+  'w-full rounded-2xl border border-2 border-black/20 px-4 py-3 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors';
+const labelClass = 'text-sm text-black';
 
 export function AddressForm({
   addressId,
@@ -377,32 +376,46 @@ export function AddressForm({
   const error = action?.error?.[addressId];
   const isDefaultAddress = defaultAddress?.id === addressId;
   return (
-    <Form id={addressId}>
-      <fieldset>
-        <input type="hidden" name="addressId" defaultValue={addressId} />
-        <label htmlFor="firstName">First name*</label>
-        <input
-          aria-label="First name"
-          autoComplete="given-name"
-          defaultValue={address?.firstName ?? ''}
-          id="firstName"
-          name="firstName"
-          placeholder="First name"
-          required
-          type="text"
-        />
-        <label htmlFor="lastName">Last name*</label>
-        <input
-          aria-label="Last name"
-          autoComplete="family-name"
-          defaultValue={address?.lastName ?? ''}
-          id="lastName"
-          name="lastName"
-          placeholder="Last name"
-          required
-          type="text"
-        />
-        <label htmlFor="company">Company</label>
+    <Form id={addressId} className="max-w-md flex flex-col gap-4">
+      <input type="hidden" name="addressId" defaultValue={addressId} />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="firstName" className={labelClass}>
+            First name*
+          </label>
+          <input
+            aria-label="First name"
+            autoComplete="given-name"
+            defaultValue={address?.firstName ?? ''}
+            id="firstName"
+            name="firstName"
+            placeholder="First name"
+            required
+            type="text"
+            className={inputClass}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="lastName" className={labelClass}>
+            Last name*
+          </label>
+          <input
+            aria-label="Last name"
+            autoComplete="family-name"
+            defaultValue={address?.lastName ?? ''}
+            id="lastName"
+            name="lastName"
+            placeholder="Last name"
+            required
+            type="text"
+            className={inputClass}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="company" className={labelClass}>
+          Company
+        </label>
         <input
           aria-label="Company"
           autoComplete="organization"
@@ -411,19 +424,29 @@ export function AddressForm({
           name="company"
           placeholder="Company"
           type="text"
+          className={inputClass}
         />
-        <label htmlFor="address1">Address line*</label>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="address1" className={labelClass}>
+          Address line*
+        </label>
         <input
           aria-label="Address line 1"
           autoComplete="address-line1"
           defaultValue={address?.address1 ?? ''}
           id="address1"
           name="address1"
-          placeholder="Address line 1*"
+          placeholder="Address line 1"
           required
           type="text"
+          className={inputClass}
         />
-        <label htmlFor="address2">Address line 2</label>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="address2" className={labelClass}>
+          Address line 2
+        </label>
         <input
           aria-label="Address line 2"
           autoComplete="address-line2"
@@ -432,53 +455,82 @@ export function AddressForm({
           name="address2"
           placeholder="Address line 2"
           type="text"
+          className={inputClass}
         />
-        <label htmlFor="city">City*</label>
-        <input
-          aria-label="City"
-          autoComplete="address-level2"
-          defaultValue={address?.city ?? ''}
-          id="city"
-          name="city"
-          placeholder="City"
-          required
-          type="text"
-        />
-        <label htmlFor="zoneCode">State / Province*</label>
-        <input
-          aria-label="State/Province"
-          autoComplete="address-level1"
-          defaultValue={address?.zoneCode ?? ''}
-          id="zoneCode"
-          name="zoneCode"
-          placeholder="State / Province"
-          required
-          type="text"
-        />
-        <label htmlFor="zip">Zip / Postal Code*</label>
-        <input
-          aria-label="Zip"
-          autoComplete="postal-code"
-          defaultValue={address?.zip ?? ''}
-          id="zip"
-          name="zip"
-          placeholder="Zip / Postal Code"
-          required
-          type="text"
-        />
-        <label htmlFor="territoryCode">Country Code*</label>
-        <input
-          aria-label="Country code"
-          autoComplete="country"
-          defaultValue={address?.territoryCode ?? ''}
-          id="territoryCode"
-          name="territoryCode"
-          placeholder="Country"
-          required
-          type="text"
-          maxLength={2}
-        />
-        <label htmlFor="phoneNumber">Phone</label>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="city" className={labelClass}>
+            City*
+          </label>
+          <input
+            aria-label="City"
+            autoComplete="address-level2"
+            defaultValue={address?.city ?? ''}
+            id="city"
+            name="city"
+            placeholder="City"
+            required
+            type="text"
+            className={inputClass}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="zoneCode" className={labelClass}>
+            State / Province*
+          </label>
+          <input
+            aria-label="State/Province"
+            autoComplete="address-level1"
+            defaultValue={address?.zoneCode ?? ''}
+            id="zoneCode"
+            name="zoneCode"
+            placeholder="State / Province"
+            required
+            type="text"
+            className={inputClass}
+          />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="zip" className={labelClass}>
+            Zip / Postal Code*
+          </label>
+          <input
+            aria-label="Zip"
+            autoComplete="postal-code"
+            defaultValue={address?.zip ?? ''}
+            id="zip"
+            name="zip"
+            placeholder="Zip / Postal Code"
+            required
+            type="text"
+            className={inputClass}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="territoryCode" className={labelClass}>
+            Country Code*
+          </label>
+          <input
+            aria-label="Country code"
+            autoComplete="country"
+            defaultValue={address?.territoryCode ?? ''}
+            id="territoryCode"
+            name="territoryCode"
+            placeholder="Country (2-letter)"
+            required
+            type="text"
+            maxLength={2}
+            className={inputClass}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="phoneNumber" className={labelClass}>
+          Phone
+        </label>
         <input
           aria-label="Phone Number"
           autoComplete="tel"
@@ -488,29 +540,23 @@ export function AddressForm({
           placeholder="+16135551111"
           pattern="^\+?[1-9]\d{3,14}$"
           type="tel"
+          className={inputClass}
         />
-        <div>
-          <input
-            defaultChecked={isDefaultAddress}
-            id="defaultAddress"
-            name="defaultAddress"
-            type="checkbox"
-          />
-          <label htmlFor="defaultAddress">Set as default address</label>
-        </div>
-        {error ? (
-          <p>
-            <mark>
-              <small>{error}</small>
-            </mark>
-          </p>
-        ) : (
-          <br />
-        )}
-        {children({
-          stateForMethod: (method) => (formMethod === method ? state : 'idle'),
-        })}
-      </fieldset>
+      </div>
+      <label className="flex items-center gap-3 text-sm text-black cursor-pointer">
+        <input
+          defaultChecked={isDefaultAddress}
+          id="defaultAddress"
+          name="defaultAddress"
+          type="checkbox"
+          className="w-4 h-4 rounded border-black/20"
+        />
+        Set as default address
+      </label>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      {children({
+        stateForMethod: (method) => (formMethod === method ? state : 'idle'),
+      })}
     </Form>
   );
 }
