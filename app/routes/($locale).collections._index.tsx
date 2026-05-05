@@ -68,7 +68,7 @@ function CollectionItem({
     <Link
       to={`/collections/${collection.handle}`}
       prefetch="intent"
-      className="space-y-3 block group"
+      className="space-y-4 block group"
     >
       <div className="rounded-[32px] overflow-hidden border-2 border-transparent group-hover:border-black transition-colors duration-300 bg-[#e4ceb4]">
         {collection.image ? (
@@ -81,12 +81,14 @@ function CollectionItem({
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full aspect-square bg-[#e4ceb4]" />
+          <img
+            src="/collection-placeholder-image.png"
+            alt={collection.title}
+            className="w-full aspect-square object-cover"
+          />
         )}
       </div>
-      <div>
-        <p className="font-semibold text-lg text-black">{collection.title}</p>
-      </div>
+      <p className="text-lg text-black">{collection.title}</p>
     </Link>
   );
 }
