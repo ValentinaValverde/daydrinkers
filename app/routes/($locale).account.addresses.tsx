@@ -263,7 +263,7 @@ export default function Addresses() {
   return (
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-6">
-        <h2 className="text-xl font-semibold text-black">Add new address</h2>
+        <h2 className="text-2xl font-semibold text-black">Add new address</h2>
         <NewAddressForm key={addresses.nodes.length} />
       </div>
       <hr className="border-black/10" />
@@ -305,7 +305,7 @@ function NewAddressForm() {
           disabled={stateForMethod('POST') !== 'idle'}
           formMethod="POST"
           type="submit"
-          className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 w-fit"
+          className="cursor-pointer rounded-full px-6 py-2.5 text-sm bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 w-fit"
         >
           {stateForMethod('POST') !== 'idle' ? 'Creating…' : 'Create'}
         </button>
@@ -320,7 +320,7 @@ function ExistingAddresses({
 }: Pick<CustomerFragment, 'addresses' | 'defaultAddress'>) {
   return (
     <div className="flex flex-col gap-10">
-      <h2 className="text-xl font-semibold text-black">Saved addresses</h2>
+      <h2 className="text-2xl font-semibold text-black">Saved addresses</h2>
       {addresses.nodes.map((address) => (
         <AddressForm
           key={address.id}
@@ -334,7 +334,7 @@ function ExistingAddresses({
                 disabled={stateForMethod('PUT') !== 'idle'}
                 formMethod="PUT"
                 type="submit"
-                className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50"
+                className="cursor-pointer rounded-full px-6 py-2.5 text-sm bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50"
               >
                 {stateForMethod('PUT') !== 'idle' ? 'Saving…' : 'Save'}
               </button>
@@ -342,7 +342,7 @@ function ExistingAddresses({
                 disabled={stateForMethod('DELETE') !== 'idle'}
                 formMethod="DELETE"
                 type="submit"
-                className="rounded-full px-6 py-2.5 text-sm font-medium border border-black bg-transparent text-black hover:bg-black/5 transition-colors disabled:opacity-50"
+                className="cursor-pointer rounded-full px-6 py-2.5 text-sm border border-2 border-black bg-transparent text-black hover:bg-black/5 transition-colors disabled:opacity-50"
               >
                 {stateForMethod('DELETE') !== 'idle' ? 'Deleting…' : 'Delete'}
               </button>
@@ -355,8 +355,8 @@ function ExistingAddresses({
 }
 
 const inputClass =
-  'w-full rounded-2xl border border-black/20 px-4 py-3 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors';
-const labelClass = 'text-sm font-medium text-black';
+  'w-full rounded-2xl border border-2 border-black/20 px-4 py-3 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors';
+const labelClass = 'text-sm text-black';
 
 export function AddressForm({
   addressId,

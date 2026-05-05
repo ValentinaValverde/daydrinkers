@@ -39,8 +39,8 @@ export default function AccountLayout() {
 
   const heading = customer
     ? customer.firstName
-      ? `Welcome, ${customer.firstName}`
-      : `Welcome to your account.`
+      ? `Welcome back ${customer.firstName}!`
+      : `Welcome to Daydrinkers!`
     : 'Account Details';
 
   return (
@@ -59,7 +59,7 @@ export default function AccountLayout() {
 }
 
 const navLinkClass = ({isActive}: {isActive: boolean}) =>
-  `rounded-full px-6 py-2.5 text-sm font-medium border border-black transition-colors ${
+  `rounded-full px-6 py-2.5 text-sm border border-2 border-black transition-colors ${
     isActive
       ? 'bg-black text-[#f0f2ea]'
       : 'bg-transparent text-black hover:bg-black/5'
@@ -87,7 +87,7 @@ function Logout() {
     <Form method="POST" action="/account/logout">
       <button
         type="submit"
-        className="rounded-full px-6 py-2.5 text-sm font-medium border border-black bg-transparent text-black hover:bg-black/5 transition-colors"
+        className="rounded-full px-6 py-2.5 text-sm border border-2 border-black bg-transparent text-black hover:bg-black/5 transition-colors cursor-pointer"
       >
         Sign out
       </button>

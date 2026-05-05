@@ -80,7 +80,7 @@ export async function action({request, context}: Route.ActionArgs) {
 }
 
 const inputClass =
-  'w-full rounded-2xl border border-black/20 px-4 py-3 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors';
+  'w-full rounded-2xl border border-2 border-black/20 px-4 py-3 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors';
 
 export default function AccountProfile() {
   const account = useOutletContext<{customer: CustomerFragment}>();
@@ -90,7 +90,7 @@ export default function AccountProfile() {
 
   return (
     <div className="max-w-md flex flex-col gap-6">
-      <h2 className="text-xl font-semibold text-black">My profile</h2>
+      <h2 className="text-2xl font-semibold text-black">My profile</h2>
       <Form method="PUT" className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <label htmlFor="firstName" className="text-sm font-medium text-black">
@@ -130,7 +130,7 @@ export default function AccountProfile() {
         <button
           type="submit"
           disabled={state !== 'idle'}
-          className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 w-fit"
+          className="cursor-pointer rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 w-fit"
         >
           {state !== 'idle' ? 'Updating…' : 'Update'}
         </button>

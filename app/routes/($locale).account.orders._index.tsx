@@ -23,6 +23,7 @@ import type {
   OrderItemFragment,
 } from 'customer-accountapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import PrimaryButton from '~/components/ui/Button';
 
 type OrdersLoaderData = {
   customer: CustomerOrdersFragment;
@@ -100,25 +101,14 @@ function EmptyOrders({hasFilters = false}: {hasFilters?: boolean}) {
           <p className="text-base text-black">
             No orders found matching your search.
           </p>
-          <Link
-            to="/account/orders"
-            className="text-sm font-medium underline text-black"
-          >
-            Clear filters
-          </Link>
         </>
       ) : (
-        <>
+        <div className="flex flex-col justify-center items-center gap-4 h-[400px]">
           <p className="text-base text-black">
             You haven&apos;t placed any orders yet.
           </p>
-          <Link
-            to="/collections"
-            className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black w-fit hover:bg-black/80 transition-colors"
-          >
-            Start Shopping
-          </Link>
-        </>
+          <PrimaryButton text="Start shopping" link="/collections" />
+        </div>
       )}
     </div>
   );
@@ -161,7 +151,7 @@ function OrderSearchForm({
       ref={formRef}
       onSubmit={handleSubmit}
       aria-label="Search orders"
-      className="flex flex-wrap gap-3 items-center"
+      className="flex gap-4 items-center"
     >
       <input
         type="search"
@@ -169,7 +159,7 @@ function OrderSearchForm({
         placeholder="Order #"
         aria-label="Order number"
         defaultValue={currentFilters.name || ''}
-        className="rounded-full border border-black/20 px-5 py-2.5 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors"
+        className="w-full rounded-full border border-2 border-black/20 px-5 py-2.5 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors"
       />
       <input
         type="search"
@@ -177,12 +167,12 @@ function OrderSearchForm({
         placeholder="Confirmation #"
         aria-label="Confirmation number"
         defaultValue={currentFilters.confirmationNumber || ''}
-        className="rounded-full border border-black/20 px-5 py-2.5 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors"
+        className="w-full rounded-full border border-2 border-black/20 px-5 py-2.5 text-sm bg-white text-black placeholder:text-black/40 focus:outline-none focus:border-black transition-colors"
       />
       <button
         type="submit"
         disabled={isSearching}
-        className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50"
+        className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-[#f0f2ea] border border-black hover:bg-black/80 transition-colors disabled:opacity-50 cursor-pointer"
       >
         {isSearching ? 'Searching…' : 'Search'}
       </button>
@@ -190,7 +180,7 @@ function OrderSearchForm({
         <button
           type="button"
           disabled={isSearching}
-          className="rounded-full px-6 py-2.5 text-sm font-medium border border-black bg-transparent text-black hover:bg-black/5 transition-colors disabled:opacity-50"
+          className="rounded-full px-6 py-2.5 text-sm font-medium border border-2 border-black bg-transparent text-black hover:bg-black/5 transition-colors disabled:opacity-50 cursor-pointer"
           onClick={() => {
             setSearchParams(new URLSearchParams());
             formRef.current?.reset();
