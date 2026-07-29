@@ -31,7 +31,7 @@ export function MenuItemCard({
           </span>
         )}
         <p className="font-medium text-lg leading-tight">{name}</p>
-        <p className="text-sm">{price}</p>
+        {/* <p className="text-sm">{price}</p> */}
       </div>
     </div>
   );

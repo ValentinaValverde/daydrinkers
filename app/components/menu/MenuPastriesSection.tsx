@@ -17,39 +17,51 @@ const sharedPastries: PastryItem[] = [
   {
     name: 'Cinnamon roll',
     price: '$3.15',
-    image: '/menu-images/placeholder.png',
-    tag: 'Saturdays only',
+    image: '/menu-images/shared/cinnamon-roll.png',
+    tag: 'Tues & Sat only',
   },
 ];
 
 const pastryItems: Record<Location, PastryItem[]> = {
-  greenville: [...sharedPastries],
-  seneca: [
+  greenville: [
     ...sharedPastries,
     {
-      name: 'Bacon, egg, and cheese sandwich',
+      name: 'Matcha Cookie',
       price: '$3.15',
-      image: '/menu-images/placeholder.png',
-      tag: 'Fri-Sun only',
+      image: '/menu-images/gvl/matcha-cookie.png',
     },
     {
-      name: 'Garden press sandwich',
+      name: 'Dairy Free Lemon Scone',
       price: '$3.15',
-      image: '/menu-images/placeholder.png',
-      tag: 'Fri-Sun only',
+      image: '/menu-images/gvl/lemon-scone.png',
     },
-    {
-      name: 'Avocado smash toast',
-      price: '$3.15',
-      image: '/menu-images/placeholder.png',
-      tag: 'Fri-Sun only',
-    },
-    {
-      name: 'Waffle with topping',
-      price: '$3.15',
-      image: '/menu-images/placeholder.png',
-      tag: 'Fri-Sun only',
-    },
+  ],
+  seneca: [
+    ...sharedPastries,
+    // {
+    //   name: 'Bacon, egg, and cheese sandwich',
+    //   price: '$3.15',
+    //   image: '/menu-images/placeholder.png',
+    //   tag: 'Fri-Sun only',
+    // },
+    // {
+    //   name: 'Garden press sandwich',
+    //   price: '$3.15',
+    //   image: '/menu-images/placeholder.png',
+    //   tag: 'Fri-Sun only',
+    // },
+    // {
+    //   name: 'Avocado smash toast',
+    //   price: '$3.15',
+    //   image: '/menu-images/placeholder.png',
+    //   tag: 'Fri-Sun only',
+    // },
+    // {
+    //   name: 'Waffle with topping',
+    //   price: '$3.15',
+    //   image: '/menu-images/placeholder.png',
+    //   tag: 'Fri-Sun only',
+    // },
   ],
 };
 

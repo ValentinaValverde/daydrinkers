@@ -20,7 +20,7 @@ export default function MenuPage() {
       <MenuHeroSection />
       <LocationToggle location={location} onLocationChange={setLocation} />
       <MenuPastriesSection location={location} />
-      <MenuGrabAndGoSection location={location} />
+      {/* <MenuGrabAndGoSection location={location} /> */}
       <MenuSeasonalSection location={location} />
       {/* <MenuDrinksSection location={location} /> */}
       <MenuCollageSection />

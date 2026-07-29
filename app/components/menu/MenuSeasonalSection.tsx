@@ -11,14 +11,35 @@ type SeasonalMenuItem = {
 
 const sharedItems: SeasonalMenuItem[] = [
   {
-    name: 'Item 1',
+    name: 'Blueberry poptart',
     price: '$3.15',
-    image: '/menu-images/other/pastry-1.png',
+    image: '/menu-images/shared/blueberry-poptart.png',
+  },
+  {
+    name: 'Guava pastelito',
+    price: '$3.15',
+    image: '/menu-images/shared/guava-pastelito.png',
+  },
+  {
+    name: 'Tomato Pie',
+    price: '$3.15',
+    image: '/menu-images/shared/tomato-pie.png',
+  },
+  {
+    name: 'Orange Cardamom Cinnamon Roll',
+    price: '$3.15',
+    image: '/menu-images/shared/orange-cinnamon-roll.png',
+  },
+  {
+    name: 'Pesto Mozzarella Puff Pastry',
+    price: '$3.15',
+    image: '/menu-images/shared/pesto-mozz-puff-pastry.png',
   },
 ];
 
 const seasonalItems: Record<Location, SeasonalMenuItem[]> = {
   greenville: [
+    ...sharedItems,
     {
       name: 'Tomato basil scone',
       price: '$3.15',
@@ -34,25 +55,20 @@ const seasonalItems: Record<Location, SeasonalMenuItem[]> = {
       price: '$3.15',
       image: '/menu-images/gvl/blackberry-earl-gray.png',
     },
-    {
-      name: 'GF/V Oatberry bar',
-      price: '$3.15',
-      image: '/menu-images/placeholder.png',
-      tag: 'Contains nuts',
-    },
+    // {
+    //   name: 'GF/V Oatberry bar',
+    //   price: '$3.15',
+    //   image: '/menu-images/placeholder.png',
+    //   tag: 'Contains nuts',
+    // },
     {
       name: 'Lemon blueberry danish',
       price: '$3.15',
       image: '/menu-images/gvl/blueberry-lemon-danish.png',
     },
-    // ...sharedItems,
   ],
   seneca: [
-    {
-      name: 'Lemon earl grey shortbread',
-      price: '$3.15',
-      image: '/menu-images/seneca/earl-gray-lemon.png',
-    },
+    ...sharedItems,
     {
       name: 'French onion scone',
       price: '$3.15',
@@ -74,27 +90,21 @@ const seasonalItems: Record<Location, SeasonalMenuItem[]> = {
       image: '/menu-images/seneca/oatmeal-raisin-cookie.png',
     },
     {
-      name: 'Blueberry poptart',
-      price: '$3.15',
-      image: '/menu-images/seneca/blueberry-poptart.png',
-    },
-    {
-      name: 'Guava pastelito',
-      price: '$3.15',
-      image: '/menu-images/seneca/guava-pastelito.png',
-    },
-    {
       name: 'Jalapeno cheddar scone',
       price: '$3.15',
       image: '/menu-images/seneca/jalapeno-cheddar-scone.png',
     },
     {
-      name: 'Blueberry lemon poppyseed roll',
+      name: 'Lemon earl grey shortbread',
       price: '$3.15',
-      image: '/menu-images/placeholder.png',
-      tag: 'Fri-Sun only',
+      image: '/menu-images/seneca/earl-gray-lemon.png',
     },
-    // ...sharedItems,
+    // {
+    //   name: 'Blueberry lemon poppyseed roll',
+    //   price: '$3.15',
+    //   image: '/menu-images/placeholder.png',
+    //   tag: 'Fri-Sun only',
+    // },
   ],
 };
 
