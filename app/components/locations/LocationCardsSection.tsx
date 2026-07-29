@@ -6,7 +6,7 @@ const locations = [
     address: '2903 Old Buncombe Rd. Greenville, SC 29609',
     description:
       'Nestled in the heart of Greenville, this is where it all started. Stop by for your morning brew, an afternoon treat, or just to say hello.',
-    image: '/images/greenville-location.png',
+    image: '/images/gvl-location.jpeg',
     link: 'https://www.google.com/maps/dir//daydrinkers,+2903+Old+Buncombe+Rd,+Greenville,+SC+29609',
     reversed: false,
   },
@@ -15,7 +15,7 @@ const locations = [
     address: '307 E North 1st Street Seneca, SC 29678',
     description:
       "Our Seneca spot brings the same good vibes to the upstate. Come hang out, grab a pastry, and stay a while — we've got plenty of room.",
-    image: '/images/greenville-location.png',
+    image: '/images/seneca-location.jpeg',
     link: 'https://www.google.com/maps?daddr=307+E+North+1st+St,+Seneca,+SC+29678',
     reversed: true,
   },
@@ -42,7 +42,7 @@ export default function LocationCardsSection() {
               <img
                 src={location.image}
                 alt={location.name}
-                className="w-full h-[380px] object-cover"
+                className="w-full h-[500px] object-cover"
               />
             </a>
 

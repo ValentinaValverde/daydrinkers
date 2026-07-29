@@ -2,13 +2,13 @@ const locations = [
   {
     name: 'Greenville Daydrinkers',
     address: '2903 Old Buncombe Rd. Greenville, SC 29609',
-    image: '/images/greenville-location.png',
+    image: '/images/gvl-location.jpeg',
     link: 'https://www.google.com/maps/dir//daydrinkers,+2903+Old+Buncombe+Rd,+Greenville,+SC+29609/@34.716397,-82.2673408,15z',
   },
   {
     name: 'Seneca Daydrinkers',
     address: '307 E North 1st Street Seneca, SC 29678',
-    image: '/images/greenville-location.png',
+    image: '/images/seneca-location.jpeg',
     link: 'https://www.google.com/maps?um=1&ie=UTF-8&fb=1&gl=us&sa=X&geocode=KYvd_yHv9ViIMY9N2OHCTh7s&daddr=307+E+North+1st+St,+Seneca,+SC+29678',
   },
 ];
@@ -41,7 +41,7 @@ export default function LocationsSection() {
                 <img
                   src={location.image}
                   alt={location.name}
-                  className="w-full h-[380px] object-cover"
+                  className="w-full h-[450px] object-cover"
                 />
               </a>
               <div className="text-base text-black">
