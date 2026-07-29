@@ -89,11 +89,11 @@ const seasonalItems: Record<Location, SeasonalMenuItem[]> = {
       price: '$3.15',
       image: '/menu-images/seneca/oatmeal-raisin-cookie.png',
     },
-    {
-      name: 'Jalapeno cheddar scone',
-      price: '$3.15',
-      image: '/menu-images/seneca/jalapeno-cheddar-scone.png',
-    },
+    // {
+    //   name: 'Jalapeno cheddar scone',
+    //   price: '$3.15',
+    //   image: '/menu-images/seneca/jalapeno-cheddar-scone.png',
+    // },
     {
       name: 'Lemon earl grey shortbread',
       price: '$3.15',
