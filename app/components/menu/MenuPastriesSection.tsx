@@ -26,14 +26,14 @@ const pastryItems: Record<Location, PastryItem[]> = {
   greenville: [
     ...sharedPastries,
     {
-      name: 'Matcha Cookie',
-      price: '$3.15',
-      image: '/menu-images/gvl/matcha-cookie.png',
-    },
-    {
       name: 'Dairy Free Lemon Scone',
       price: '$3.15',
       image: '/menu-images/gvl/lemon-scone.png',
+    },
+    {
+      name: 'Matcha Cookie',
+      price: '$3.15',
+      image: '/menu-images/gvl/matcha-cookie.png',
     },
   ],
   seneca: [

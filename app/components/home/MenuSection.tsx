@@ -19,8 +19,8 @@ export default function MenuSection() {
               Looking for our menu?
             </h2>
             <p className="text-base text-[#f0f2ea]">
-              From morning espresso to afternoon bites, we've got something
-              for every kind of day. Come see what we're serving.
+              From morning espresso to afternoon bites, we've got something for
+              every kind of day. Come see what we're serving.
             </p>
             <SecondaryButton text="Explore Options" link="/menu" />
           </div>
@@ -35,7 +35,7 @@ export default function MenuSection() {
               }}
             >
               <img
-                src="/images/menu-img-1.png"
+                src="/images/menu-img-4.jpeg"
                 alt="Menu tray"
                 className="w-full h-full object-cover"
               />
@@ -52,7 +52,7 @@ export default function MenuSection() {
               }}
             >
               <img
-                src="/images/menu-img-1.png"
+                src="/images/sheet-pastries.jpeg"
                 alt="Menu tray"
                 className="w-full h-full object-cover"
               />
@@ -68,7 +68,7 @@ export default function MenuSection() {
               }}
             >
               <img
-                src="/images/menu-img-2.png"
+                src="/images/menu-img-4.jpeg"
                 alt="Menu food board"
                 className="w-full h-full object-cover"
               />
