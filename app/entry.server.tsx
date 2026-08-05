@@ -26,6 +26,7 @@ export default async function handleRequest(
       'https://fonts.googleapis.com',
     ],
     fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+    frameSrc: ["'self'", 'https://calendar.google.com/ '],
   });
 
   const body = await renderToReadableStream(

@@ -25,7 +25,7 @@ const decorativeImages = [
   },
 ];
 
-export default function ContactSection() {
+export default function EventsContactSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollDelta, setScrollDelta] = useState(0);
   const fetcher = useFetcher<{success?: boolean; error?: string}>();
@@ -115,7 +115,11 @@ export default function ContactSection() {
               </p>
             </div>
 
-            <fetcher.Form ref={formRef} method="post" className="flex flex-col gap-4">
+            <fetcher.Form
+              ref={formRef}
+              method="post"
+              className="flex flex-col gap-4"
+            >
               <input
                 type="text"
                 name="name"
@@ -145,7 +149,9 @@ export default function ContactSection() {
                 <p className="text-red-600 text-sm">{fetcher.data.error}</p>
               )}
               {submitted ? (
-                <p className="text-[#3c6d8e] font-medium">Thanks! We&apos;ll be in touch soon.</p>
+                <p className="text-[#3c6d8e] font-medium">
+                  Thanks! We&apos;ll be in touch soon.
+                </p>
               ) : (
                 <button
                   type="submit"

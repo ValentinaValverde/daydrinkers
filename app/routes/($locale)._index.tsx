@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {Resend} from 'resend';
 import type {Route} from './+types/_index';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 import HeroSection from '~/components/home/HeroSection';
@@ -19,6 +20,35 @@ type HomeDataResult = {
   seasonalCollection: {products: {nodes: ProductItemFragment[]}} | null;
   products: {nodes: ProductItemFragment[]};
 };
+
+export async function action({request, context}: Route.ActionArgs) {
+  const formData = await request.formData();
+  const name = String(formData.get('name') ?? '');
+  const email = String(formData.get('email') ?? '');
+  const phone = String(formData.get('phone') ?? '');
+  const message = String(formData.get('message') ?? '');
+
+  if (!email) return {error: 'Email is required'};
+
+  const resend = new Resend((context.env as Record<string, string>).RESEND_API_KEY);
+
+  await Promise.all([
+    resend.emails.send({
+      from: 'Daydrinkers <onboarding@resend.dev>',
+      to: 'hellodaydrinkers@gmail.com',
+      subject: `New contact form submission from ${name || email}`,
+      text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`,
+    }),
+    resend.emails.send({
+      from: 'Daydrinkers <onboarding@resend.dev>',
+      to: email,
+      subject: "We got your message!",
+      text: `Hi ${name || 'there'},\n\nThanks for reaching out — we got your message and will be in touch soon!\n\nThe Daydrinkers Team`,
+    }),
+  ]);
+
+  return {success: true};
+}
 
 export async function loader({context}: Route.LoaderArgs) {
   const {storefront, env} = context;
