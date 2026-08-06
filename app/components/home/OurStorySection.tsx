@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import ScallopBorder from '~/components/ui/ScallopBorder';
 
 const TEXT =
-  'We started Daydrinkers because we believed a great drink deserved a great atmosphere. Born in the South Carolina foothills, we\'re part café, part gathering place — a spot where good coffee, fresh pastries, and good company all collide. Whether you\'re starting your morning or stretching your afternoon, we\'re here for it.';
+  'We didn\'t just want to open coffee shops. We wanted to give people a reason to slow down and show up for each other. At the heart of it, we just wanted a place where people felt seen. The coffee\'s just the excuse…a ridiculously delicious excuse.';
 
 export default function OurStorySection() {
   const sectionRef = useRef<HTMLElement>(null);

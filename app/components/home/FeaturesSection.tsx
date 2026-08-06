@@ -2,17 +2,17 @@ const features = [
   {
     title: 'Comfy apparel',
     description:
-      'Tees, hats, and more — designed for people who like to look good while they take it easy.',
+      "Tees, hats, and more — designed for people who like to look good while taking it easy. We take it seriously that you're repping us.",
     icon: '/seashell.svg',
   },
   {
-    title: 'Top notch drinks',
+    title: 'Drinks that hit',
     description:
-      "Espresso, cold brew, seasonal specials. We take our drinks seriously so you don't have to.",
+      "House blend espresso, smooth cold brew, dreamy cold foams, housemade flavors — we take our drinks seriously so you can just enjoy the moment. There's something for everyone at the table.",
     icon: '/kettle.svg',
   },
   {
-    title: 'Cool people',
+    title: 'Our people',
     description:
       'Our crew makes the difference. Come for the coffee, stay for the conversation.',
     icon: '/cards.svg',
@@ -38,7 +38,7 @@ export default function FeaturesSection() {
                 <h3 className="text-base md:text-xl font-bold text-black">
                   {feature.title}
                 </h3>
-                <p className="text-base text-black max-w-[210px]">
+                <p className="text-base text-black max-w-[280px]">
                   {feature.description}
                 </p>
               </div>

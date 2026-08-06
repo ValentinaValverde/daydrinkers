@@ -27,7 +27,8 @@ export function Footer({
         <div className="flex flex-col items-center pt-32 pb-10 gap-4 text-center px-8">
           <h2 className="text-3xl font-bold text-black">Made with Love</h2>
           <p className="text-base text-black max-w-[603px]">
-            Comfy apparel, top notch drinks, cool people.
+            Comfy apparel, drinks that hit right, people who make it feel like
+            home.
           </p>
           <div className="flex gap-4 mt-2 text-black">
             <a
