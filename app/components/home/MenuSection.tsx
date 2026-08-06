@@ -19,8 +19,8 @@ export default function MenuSection() {
               Looking for our menu?
             </h2>
             <p className="text-base text-[#f0f2ea]">
-              From morning espresso to afternoon bites, we've got something for
-              every kind of day. Come see what we're serving.
+              From morning espresso to afternoon bites &mdash; come find your
+              usual.
             </p>
             <SecondaryButton text="Explore Options" link="/menu" />
           </div>

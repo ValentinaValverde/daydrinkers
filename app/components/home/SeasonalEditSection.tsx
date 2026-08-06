@@ -21,9 +21,8 @@ export default function SeasonalEditSection({
                 Shop our Summer Collection.
               </h2>
               <p className="text-base text-black max-w-[470px]">
-                Sip in style. Our summer edit is stocked with easy layers,
-                relaxed fits, and everything you need to stay looking good when
-                the temperature rises.
+                Made for iced coffee runs, porch hangs, and everything else
+                summer&rsquo;s an excuse for.
               </p>
               <PrimaryButton text="See More" link={`/collections/${collectionHandle}`} />
             </div>
