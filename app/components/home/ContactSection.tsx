@@ -1,4 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
+import {useFetcher} from 'react-router';
+import type {ContactActionData} from '~/routes/api.contact';
 
 const decorativeImages = [
   {
@@ -27,6 +29,11 @@ const decorativeImages = [
 export default function ContactSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollDelta, setScrollDelta] = useState(0);
+  const fetcher = useFetcher<ContactActionData>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const data = fetcher.data;
+  const succeeded = data?.ok === true;
+  const errors = data?.errors;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -101,38 +108,97 @@ export default function ContactSection() {
                 We would love to chat!
               </h2>
               <p className="text-base text-black mt-2">
-                Please fill out your informations etc etc.
+                Drop us a note and we&rsquo;ll get back to you soon.
               </p>
             </div>
 
-            <form className="flex flex-col gap-4">
-              <input
-                type="text"
-                placeholder="Name"
-                className="bg-white border border-[#2a6b8f] rounded-full px-8 h-[67px] text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f]"
-              />
-              <input
-                type="email"
-                placeholder="Email*"
-                className="bg-white border border-[#2a6b8f] rounded-full px-8 h-[67px] text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f]"
-              />
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                className="bg-white border border-[#2a6b8f] rounded-full px-8 h-[67px] text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f]"
-              />
-              <textarea
-                placeholder="What's on your mind?"
-                rows={5}
-                className="bg-white border border-[#2a6b8f] rounded-[32px] px-8 py-5 text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f] resize-none h-[212px]"
-              />
-              <button
-                type="submit"
-                className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center text-base w-fit mt-2 hover:bg-transparent hover:text-black transition-colors"
+            {succeeded ? (
+              <div
+                role="status"
+                className="bg-white border border-[#2a6b8f] rounded-[32px] px-8 py-10 text-center"
               >
-                Submit
-              </button>
-            </form>
+                <p className="text-xl font-bold text-black">
+                  Thanks for reaching out!
+                </p>
+                <p className="text-base text-black mt-2">
+                  We got your message and someone from our crew will get back to
+                  you soon.
+                </p>
+              </div>
+            ) : (
+              <fetcher.Form
+                method="post"
+                action="/api/contact"
+                className="flex flex-col gap-4"
+              >
+                {/* Honeypot — hidden from real users, catches bots. */}
+                <input
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="hidden"
+                />
+
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  autoComplete="name"
+                  className="bg-white border border-[#2a6b8f] rounded-full px-8 h-[67px] text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f]"
+                />
+
+                <div className="flex flex-col gap-1">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Email*"
+                    autoComplete="email"
+                    aria-invalid={errors?.email ? true : undefined}
+                    className="bg-white border border-[#2a6b8f] rounded-full px-8 h-[67px] text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f]"
+                  />
+                  {errors?.email && (
+                    <p className="text-sm text-red-700 px-4">{errors.email}</p>
+                  )}
+                </div>
+
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone Number"
+                  autoComplete="tel"
+                  className="bg-white border border-[#2a6b8f] rounded-full px-8 h-[67px] text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f]"
+                />
+
+                <div className="flex flex-col gap-1">
+                  <textarea
+                    name="message"
+                    required
+                    placeholder="What's on your mind?"
+                    rows={5}
+                    aria-invalid={errors?.message ? true : undefined}
+                    className="bg-white border border-[#2a6b8f] rounded-[32px] px-8 py-5 text-base text-black placeholder:text-black focus:outline-none focus:ring-2 focus:ring-[#2a6b8f] resize-none h-[212px]"
+                  />
+                  {errors?.message && (
+                    <p className="text-sm text-red-700 px-4">{errors.message}</p>
+                  )}
+                </div>
+
+                {errors?.form && (
+                  <p className="text-sm text-red-700 px-4">{errors.form}</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-black text-[#f0f2ea] border-2 border-black rounded-full px-8 py-4 flex items-center text-base w-fit mt-2 hover:bg-transparent hover:text-black transition-colors disabled:opacity-60 disabled:hover:bg-black disabled:hover:text-[#f0f2ea] disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Sending…' : 'Submit'}
+                </button>
+              </fetcher.Form>
+            )}
           </div>
         </div>
       </div>
