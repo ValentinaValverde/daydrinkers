@@ -18,11 +18,16 @@ export default function MenuPage() {
   return (
     <div className="min-h-screen bg-[#f0f2ea]">
       <MenuHeroSection />
+      <MenuDrinksSection />
+
+      {/* Pastries — location-specific, chosen via the toggle below */}
+      <div className="bg-[#f0f2ea] text-center px-6 pt-16 md:pt-24">
+        <h2 className="text-4xl md:text-5xl font-bold text-black">Pastries</h2>
+      </div>
       <LocationToggle location={location} onLocationChange={setLocation} />
       <MenuPastriesSection location={location} />
       {/* <MenuGrabAndGoSection location={location} /> */}
       <MenuSeasonalSection location={location} />
-      {/* <MenuDrinksSection location={location} /> */}
       <MenuCollageSection />
     </div>
   );
