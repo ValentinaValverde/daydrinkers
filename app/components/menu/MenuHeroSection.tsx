@@ -21,7 +21,8 @@ export default function MenuHeroSection() {
       <div className="relative z-10 flex flex-col items-center justify-center h-full gap-4 px-6 text-center text-white">
         <h1 className="text-4xl md:text-5xl font-bold">Our Menu</h1>
         <p className="text-base max-w-[452px] opacity-90">
-          Text about how menus differ by location.
+          The same drinks at both shops, plus house-made pastries that change by
+          location and season. Come find your usual.
         </p>
       </div>
     </section>
