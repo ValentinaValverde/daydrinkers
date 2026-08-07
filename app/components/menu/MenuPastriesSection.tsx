@@ -3,7 +3,14 @@ import {MenuItemCard} from './shared';
 
 type PastryItem = {name: string; price: string; image: string; tag?: string};
 
+// Year-round pastries — identical at both Greenville and Seneca.
 const sharedPastries: PastryItem[] = [
+  {
+    name: 'Cinnamon roll',
+    price: '$3.15',
+    image: '/menu-images/shared/cinnamon-roll.png',
+    tag: 'Tues & Sat only',
+  },
   {
     name: 'Chocolate chip cookie',
     price: '$3.15',
@@ -14,55 +21,11 @@ const sharedPastries: PastryItem[] = [
     price: '$3.15',
     image: '/menu-images/shared/gf-choc-banana-loaf.png',
   },
-  {
-    name: 'Cinnamon roll',
-    price: '$3.15',
-    image: '/menu-images/shared/cinnamon-roll.png',
-    tag: 'Tues & Sat only',
-  },
 ];
 
 const pastryItems: Record<Location, PastryItem[]> = {
-  greenville: [
-    ...sharedPastries,
-    {
-      name: 'Dairy Free Lemon Scone',
-      price: '$3.15',
-      image: '/menu-images/gvl/lemon-scone.png',
-    },
-    {
-      name: 'Matcha Cookie',
-      price: '$3.15',
-      image: '/menu-images/gvl/matcha-cookie.png',
-    },
-  ],
-  seneca: [
-    ...sharedPastries,
-    // {
-    //   name: 'Bacon, egg, and cheese sandwich',
-    //   price: '$3.15',
-    //   image: '/menu-images/placeholder.png',
-    //   tag: 'Fri-Sun only',
-    // },
-    // {
-    //   name: 'Garden press sandwich',
-    //   price: '$3.15',
-    //   image: '/menu-images/placeholder.png',
-    //   tag: 'Fri-Sun only',
-    // },
-    // {
-    //   name: 'Avocado smash toast',
-    //   price: '$3.15',
-    //   image: '/menu-images/placeholder.png',
-    //   tag: 'Fri-Sun only',
-    // },
-    // {
-    //   name: 'Waffle with topping',
-    //   price: '$3.15',
-    //   image: '/menu-images/placeholder.png',
-    //   tag: 'Fri-Sun only',
-    // },
-  ],
+  greenville: [...sharedPastries],
+  seneca: [...sharedPastries],
 };
 
 export default function MenuPastriesSection({location}: {location: Location}) {
@@ -71,7 +34,7 @@ export default function MenuPastriesSection({location}: {location: Location}) {
   return (
     <section className="bg-[#f0f2ea] px-6 md:px-16 max-w-screen-xl mx-auto py-16 md:py-24">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-semibold text-black">Goodies</h2>
+        <h2 className="text-3xl font-semibold text-black">Year-Round Goodies</h2>
         <p className="text-base text-black mt-2">
           Baked fresh and made to disappear.
         </p>

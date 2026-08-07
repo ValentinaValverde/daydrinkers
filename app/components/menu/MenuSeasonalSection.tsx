@@ -9,6 +9,7 @@ type SeasonalMenuItem = {
   tag?: string;
 };
 
+// Shared summer seasonal items — offered at both Greenville and Seneca.
 const sharedItems: SeasonalMenuItem[] = [
   {
     name: 'Blueberry poptart',
@@ -20,91 +21,49 @@ const sharedItems: SeasonalMenuItem[] = [
     price: '$3.15',
     image: '/menu-images/shared/guava-pastelito.png',
   },
-  {
-    name: 'Tomato Pie',
-    price: '$3.15',
-    image: '/menu-images/shared/tomato-pie.png',
-  },
-  {
-    name: 'Orange Cardamom Cinnamon Roll',
-    price: '$3.15',
-    image: '/menu-images/shared/orange-cinnamon-roll.png',
-  },
-  {
-    name: 'Pesto Mozzarella Puff Pastry',
-    price: '$3.15',
-    image: '/menu-images/shared/pesto-mozz-puff-pastry.png',
-  },
 ];
 
 const seasonalItems: Record<Location, SeasonalMenuItem[]> = {
   greenville: [
     ...sharedItems,
     {
-      name: 'Tomato basil scone',
+      name: 'Tomato pie',
       price: '$3.15',
-      image: '/menu-images/gvl/tomato-basil.png',
+      image: '/menu-images/shared/tomato-pie.png',
     },
     {
-      name: 'Spinach Feta Puff',
+      name: 'Orange cardamom cinnamon roll',
       price: '$3.15',
-      image: '/menu-images/gvl/spinach-feta.png',
+      image: '/menu-images/shared/orange-cinnamon-roll.png',
     },
     {
-      name: 'Blackberry Earl Gray Scone',
+      name: 'Tomato pesto puff',
       price: '$3.15',
-      image: '/menu-images/gvl/blackberry-earl-gray.png',
+      image: '/menu-images/shared/pesto-mozz-puff-pastry.png',
     },
-    // {
-    //   name: 'GF/V Oatberry bar',
-    //   price: '$3.15',
-    //   image: '/menu-images/placeholder.png',
-    //   tag: 'Contains nuts',
-    // },
     {
-      name: 'Lemon blueberry danish',
+      name: 'Lemon scone',
       price: '$3.15',
-      image: '/menu-images/gvl/blueberry-lemon-danish.png',
+      image: '/menu-images/gvl/lemon-scone.png',
+    },
+    {
+      name: 'Matcha cookie',
+      price: '$3.15',
+      image: '/menu-images/gvl/matcha-cookie.png',
     },
   ],
   seneca: [
     ...sharedItems,
     {
-      name: 'French onion scone',
+      name: 'Tomato jalapeño cheddar scone',
       price: '$3.15',
-      image: '/menu-images/seneca/french-onion-scone.png',
-    },
-    {
-      name: 'Strawberry white chocolate scone',
-      price: '$3.15',
-      image: '/menu-images/seneca/strawberry-white-choc-scone.png',
-    },
-    {
-      name: 'GF PB chocolate sandwich cookie',
-      price: '$3.15',
-      image: '/menu-images/seneca/gf-pb-choc-sandwich-cookie.png',
+      image: '/menu-images/seneca/jalapeno-cheddar-scone.png',
     },
     {
       name: 'Oatmeal raisin cookie',
       price: '$3.15',
       image: '/menu-images/seneca/oatmeal-raisin-cookie.png',
     },
-    // {
-    //   name: 'Jalapeno cheddar scone',
-    //   price: '$3.15',
-    //   image: '/menu-images/seneca/jalapeno-cheddar-scone.png',
-    // },
-    {
-      name: 'Lemon earl grey shortbread',
-      price: '$3.15',
-      image: '/menu-images/seneca/earl-gray-lemon.png',
-    },
-    // {
-    //   name: 'Blueberry lemon poppyseed roll',
-    //   price: '$3.15',
-    //   image: '/menu-images/placeholder.png',
-    //   tag: 'Fri-Sun only',
-    // },
   ],
 };
 
