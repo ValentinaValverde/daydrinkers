@@ -8,6 +8,7 @@ import type {
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
+import {SpotifyProvider} from '~/components/SpotifyPlayer';
 import {CartMain} from '~/components/CartMain';
 import {
   SEARCH_ENDPOINT,
@@ -35,26 +36,24 @@ export function PageLayout({
   seasonalCollectionHandle,
 }: PageLayoutProps) {
   return (
-    <Aside.Provider>
-      <CartAside cart={cart} />
-      <SearchAside />
-      <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} seasonalCollectionHandle={seasonalCollectionHandle} />
-      {header && (
-        <Header
+    <SpotifyProvider>
+      <Aside.Provider>
+        <CartAside cart={cart} />
+        <SearchAside />
+        <MobileMenuAside
           header={header}
-          cart={cart}
-          isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
           seasonalCollectionHandle={seasonalCollectionHandle}
         />
-      )}
-      <main className="pt-[66px]">{children}</main>
-      <Footer
-        footer={footer}
-        header={header}
-        publicStoreDomain={publicStoreDomain}
-      />
-    </Aside.Provider>
+        {header && (
+          <Header
+            header={header}
+            publicStoreDomain={publicStoreDomain}
+            seasonalCollectionHandle={seasonalCollectionHandle}
+          />
+        )}
+      </Aside.Provider>
+    </SpotifyProvider>
   );
 }
 
